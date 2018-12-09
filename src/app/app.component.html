@@ -2,12 +2,21 @@
      [attr.viewBox]="'0 0 ' + 2 * scale + ' ' + scale"
      preserveAspectRatio="xMinYMin meet">
 
-    <circle [attr.cx]="scale"
-            [attr.cy]="scale / 2"
-            r="40"
+    <circle *ngFor="let circle of circles; index as i"
+            [attr.cx]="centreX"
+            [attr.cy]="centreY"
+            [attr.r]="(i + 1) * 50"
             stroke="black"
-            stroke-width="3"
-            fill="red" />
+            stroke-width="1"
+            fill="none" />
+
+    <line *ngFor="let line of lines; index as i" 
+          [attr.x1]="centreX"
+          [attr.y1]="centreY"
+          [attr.x2]="centreX + edgeX(i, lines.length)"
+          [attr.y2]="centreY - edgeY(i, lines.length)"
+          stroke="red"
+          stroke-width="1" />
 
 </svg>
 
