@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { setClassMetadata } from '@angular/core/src/render3';
-import { listeners } from 'cluster';
+
+import { GoogleSheetsService } from './services/google-sheets.service';
+
 
 @Component({
   selector: 'app-root',
@@ -36,17 +37,20 @@ export class AppComponent {
     { title: '8' },
   ]
 
+  constructor(private googleSheets: GoogleSheetsService) {
+    // this.googleSheets.getData()
+    //   .subscribe((data) => { console.log(data) });
+  }
+
   edgeX(index, length) {
     const angle = index / length;
     const x = this.radius * Math.sin(angle * 2 * Math.PI);
-    console.log(x);
     return x;
   }
 
   edgeY(index, length) {
     const angle = index / length;
     const y = this.radius * Math.cos(angle * 2 * Math.PI);
-    console.log(y);
     return y;
   }
 }
