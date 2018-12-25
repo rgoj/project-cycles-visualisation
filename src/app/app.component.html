@@ -1,22 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg"
-     [attr.viewBox]="'0 0 ' + 2 * scale + ' ' + scale"
-     preserveAspectRatio="xMinYMin meet">
+  [attr.viewBox]="'0 0 ' + 2 * scale + ' ' + scale"
+  preserveAspectRatio="xMinYMin meet">
 
-    <circle *ngFor="let circle of circles; index as i"
-            [attr.cx]="centreX"
+  <g *ngFor="let circle of circles; index as i">
+    <circle [attr.cx]="centreX"
             [attr.cy]="centreY"
-            [attr.r]="(i + 1) * 50"
+            [attr.r]="(i + 1) * circleRadialDistance"
             stroke="black"
             stroke-width="1"
             fill="none" />
 
-    <line *ngFor="let line of lines; index as i" 
-          [attr.x1]="centreX"
-          [attr.y1]="centreY"
-          [attr.x2]="centreX + edgeX(i, lines.length)"
-          [attr.y2]="centreY - edgeY(i, lines.length)"
-          stroke="red"
-          stroke-width="1" />
+    <text [attr.transform]="'rotate(270)
+                             translate(' +
+                               (scale) + ', ' +
+                               (500 + (i + 0.9) * circleRadialDistance) +
+                             ')'"
+          style="transform-origin: 50% 50%;">
+      {{circle.title}}
+    </text>
+  </g>
+
+  <line *ngFor="let line of lines; index as i" 
+    [attr.x1]="centreX"
+    [attr.y1]="centreY"
+    [attr.x2]="centreX + edgeX(i, lines.length)"
+    [attr.y2]="centreY - edgeY(i, lines.length)"
+    stroke="red"
+    stroke-width="1" />
 
 </svg>
 

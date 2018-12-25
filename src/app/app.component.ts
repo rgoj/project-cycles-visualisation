@@ -17,20 +17,10 @@ export class AppComponent {
   centreX = this.scale;
   centreY = this.scale / 2;
 
-  circles = [
-    { title: '1' },
-    { title: '2' },
-    { title: '3' },
-    { title: '4' },
-    { title: '5' },
-    { title: '6' },
-    { title: '7' },
-    { title: '8' },
-    { title: '9' }
-  ]
+  radius = 490;
+  circleRadialDistance;
 
-  radius = 450;
-
+  circles = [];
   lines = [];
 
   constructor(private googleSheets: GoogleSheetsService) {
@@ -43,12 +33,19 @@ export class AppComponent {
 
   processData() {
     const headings = this.data.values[0];
-    const indexFirstStage = this.convertColumn('L');
-    const indexLastStage = this.convertColumn('Y');
+    const indexFirstLine = this.convertColumn('L');
+    const indexLastLine = this.convertColumn('Y');
+    const indexFirstCircle = this.convertColumn('Z');
+    const indexLastCircle = this.convertColumn('AK');
 
-    for (let i = indexFirstStage; i < indexLastStage; i++) {
+    for (let i = indexFirstLine; i < indexLastLine; i++) {
       this.lines.push({ title: headings[i] });
     }
+
+    for (let i = indexFirstCircle; i < indexLastCircle; i++) {
+      this.circles.push({ title: headings[i] });
+    }
+    this.circleRadialDistance = this.radius / this.circles.length;
 
     console.log(this.lines);
   }
