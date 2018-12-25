@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
+import { NgxWebstorageModule } from 'ngx-webstorage';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CacheInterceptor } from './services/cache.interceptor';
@@ -14,6 +16,8 @@ import { CacheInterceptor } from './services/cache.interceptor';
   imports: [
     BrowserModule,
     HttpClientModule,
+
+    NgxWebstorageModule.forRoot(),
 
     AppRoutingModule
   ],
