@@ -14,7 +14,11 @@ import { RequestCacheService } from '../services/request-cache.service';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-const TTL = 10;
+
+// For now, during development, cache for a month and just flush the cache
+// manually whenever necessary
+const TTL = 31 * 24 * 3600;
+
 
 @Injectable()
 export class CacheInterceptor implements HttpInterceptor {
