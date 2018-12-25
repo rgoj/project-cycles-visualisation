@@ -21,8 +21,17 @@ export class CacheInterceptor implements HttpInterceptor {
   constructor(private cache: RequestCacheService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
+    console.log('CacheInterceptor: Intercepting request to: ' + req.url);
+
     const cachedResponse = this.cache.get(req.url);
-    return cachedResponse ? of(cachedResponse) : this.sendRequest(req, next);
+
+    if (cachedResponse) {
+      console.log('CacheInterceptor: Retrieved response from cache');
+      return of(cachedResponse);
+    } else {
+      console.log('CacheInterceptor: Sending request to live URL');
+      return this.sendRequest(req, next);
+    }
   }
 
   sendRequest(
@@ -33,6 +42,7 @@ export class CacheInterceptor implements HttpInterceptor {
       tap(event => {
         // There may be other events besides the response.
         if (event instanceof HttpResponse) {
+          console.log('CacheInterceptor: Caching the received response');
           this.cache.set(req.url, event, TTL); // Update the cache.
         }
       })

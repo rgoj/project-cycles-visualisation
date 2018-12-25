@@ -17,6 +17,8 @@ export class GoogleSheetsService {
   constructor(private http: HttpClient) { }
 
   getData() {
-    return this.http.get(this.sheetsUrl);
+    // return this.http.get(this.sheetsUrl);
+    const fakeApi = 'https://jsonplaceholder.typicode.com/todos/1';
+    return this.http.get(fakeApi);
   }
 }

@@ -38,8 +38,8 @@ export class AppComponent {
   ]
 
   constructor(private googleSheets: GoogleSheetsService) {
-    // this.googleSheets.getData()
-    //   .subscribe((data) => { console.log(data) });
+    this.googleSheets.getData()
+      .subscribe((data) => { console.log(data) });
   }
 
   edgeX(index, length) {
