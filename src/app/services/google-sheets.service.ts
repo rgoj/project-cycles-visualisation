@@ -12,13 +12,13 @@ export class GoogleSheetsService {
   // My API key
   apiKey = 'AIzaSyAXPMtMuYPyseYTM1AURzZ7KtF3vkTf08I';
 
-  sheetsUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + this.sheetsId + '/values/Sheet1?key=' + this.apiKey;
+  sheetsUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + this.sheetsId + '/values/Master?key=' + this.apiKey;
 
   constructor(private http: HttpClient) { }
 
   getData() {
-    // return this.http.get(this.sheetsUrl);
-    const fakeApi = 'https://jsonplaceholder.typicode.com/todos/1';
-    return this.http.get(fakeApi);
+    return this.http.get(this.sheetsUrl);
+    // const fakeApi = 'https://jsonplaceholder.typicode.com/todos/1';
+    // return this.http.get(fakeApi);
   }
 }
