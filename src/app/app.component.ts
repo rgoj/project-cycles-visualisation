@@ -28,18 +28,25 @@ export class AppComponent {
       this.data = data;
       this.processData();
     });
-    this.lines.push('asdf');
   }
 
   processData() {
     const headings = this.data.values[0];
+
     const indexFirstLine = this.convertColumn('L');
     const indexLastLine = this.convertColumn('Y');
+    const numberOfLines = indexLastLine - indexFirstLine;
+
     const indexFirstCircle = this.convertColumn('Z');
     const indexLastCircle = this.convertColumn('AK');
 
-    for (let i = indexFirstLine; i < indexLastLine; i++) {
-      this.lines.push({ title: headings[i] });
+    for (let i = 0; i < numberOfLines; i++) {
+      this.lines.push({
+        title: headings[indexFirstLine + i],
+        angle: this.lineAngle(i, numberOfLines),
+        edgeX: this.centreX + this.edgeX(i, numberOfLines),
+        edgeY: this.centreY + this.edgeY(i, numberOfLines)
+      });
     }
 
     for (let i = indexFirstCircle; i < indexLastCircle; i++) {
@@ -67,14 +74,18 @@ export class AppComponent {
     return result;
   };
 
-  edgeX(index, length) {
-    const angle = index / length;
+  lineAngle(index: number, length: number) {
+    return index / length;
+  }
+
+  edgeX(index: number, length: number) {
+    const angle = this.lineAngle(index, length);
     const x = this.radius * Math.sin(angle * 2 * Math.PI);
     return x;
   }
 
-  edgeY(index, length) {
-    const angle = index / length;
+  edgeY(index: number, length: number) {
+    const angle = this.lineAngle(index, length);
     const y = this.radius * Math.cos(angle * 2 * Math.PI);
     return y;
   }

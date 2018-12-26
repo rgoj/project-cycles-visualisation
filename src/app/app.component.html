@@ -10,7 +10,8 @@
             stroke-width="1"
             fill="none" />
 
-    <text [attr.transform]="'rotate(270)
+    <text class="aspect__text"
+          [attr.transform]="'rotate(270)
                              translate(' +
                                (scale) + ', ' +
                                (500 + (i + 0.9) * circleRadialDistance) +
@@ -20,14 +21,30 @@
     </text>
   </g>
 
-  <line *ngFor="let line of lines; index as i" 
-    [attr.x1]="centreX"
-    [attr.y1]="centreY"
-    [attr.x2]="centreX + edgeX(i, lines.length)"
-    [attr.y2]="centreY - edgeY(i, lines.length)"
-    stroke="red"
-    stroke-width="1" />
+  <g *ngFor="let line of lines; index as i">
+    <line class="stage__line"
+          [attr.x1]="centreX"
+          [attr.y1]="centreY"
+          [attr.x2]="line.edgeX"
+          [attr.y2]="line.edgeY"
+          stroke="red"
+          stroke-width="1" />
 
+          <!-- [attr.x2]="centreX + edgeX(i, lines.length)"
+          [attr.y2]="centreY - edgeY(i, lines.length)" -->
+
+    <text class="stage__text"
+          [attr.transform]="'translate(' +
+                               line.edgeX + ', ' +
+                               (line.edgeY) +
+                             ')
+                             rotate(' + (270 - 360 * line.angle) + ')
+                             translate(5, -5)
+                            '"
+          fill="red">
+      {{line.title}}
+    </text>
+  </g>
 </svg>
 
 
