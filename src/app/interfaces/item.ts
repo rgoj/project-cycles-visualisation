@@ -5,14 +5,16 @@ export interface ItemArc {
   firstStageName: string;
   lastStageName: string;
 
-  aspectIndex: number,
-  aspectName: string,
+  aspectIndex: number;
+  aspectName: string;
 
-  arcRadius: number,
-  arcStartX: number;
-  arcStartY: number;
-  arcEndX: number;
-  arcEndY: number;
+  radius: number;
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+
+  largeArcFlag: number;
 }
 
 export class Aspect {

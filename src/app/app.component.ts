@@ -86,7 +86,7 @@ export class AppComponent {
       // TODO: Move to "processItemStages";
       let arcFirstStage: null|number = null;
       let arcLastStage: null|number = null;
-      for (let stage = 0; stage < sheetConfig.numberOfLines; stage++) {
+      for (let stage = 0; stage <= sheetConfig.numberOfLines + 1; stage++) {
         const stageColumn = indexFirstLine + stage;
         const stageState = itemRow[stageColumn];
 
@@ -142,6 +142,8 @@ export class AppComponent {
     lastStageIndex: number,
     aspectIndex: number
   ): ItemArc {
+    const largeArcFlag = (lastStageIndex - firstStageIndex) / sheetConfig.numberOfLines > 0.5 ? 1 : 0;
+
     const itemArc: ItemArc = {
       firstStageIndex: firstStageIndex,
       lastStageIndex: lastStageIndex, 
@@ -152,11 +154,13 @@ export class AppComponent {
       aspectIndex: aspectIndex,
       aspectName: this.circles[aspectIndex].title,
 
-      arcRadius: this.circles[aspectIndex].radius,
-      arcStartX: this.intersectX(sheetConfig, firstStageIndex, aspectIndex),
-      arcStartY: this.intersectY(sheetConfig, firstStageIndex, aspectIndex),
-      arcEndX: this.intersectX(sheetConfig, lastStageIndex, aspectIndex),
-      arcEndY: this.intersectY(sheetConfig, lastStageIndex, aspectIndex),
+      radius: this.circles[aspectIndex].radius,
+      startX: this.intersectX(sheetConfig, firstStageIndex, aspectIndex),
+      startY: this.intersectY(sheetConfig, firstStageIndex, aspectIndex),
+      endX: this.intersectX(sheetConfig, lastStageIndex + 1, aspectIndex),
+      endY: this.intersectY(sheetConfig, lastStageIndex + 1, aspectIndex),
+
+      largeArcFlag: largeArcFlag,
     } 
     console.log('Adding arc')
     return itemArc;
@@ -180,7 +184,7 @@ export class AppComponent {
   };
 
   lineAngle(index: number, length: number) {
-    return index / length;
+    return index / (length + 1);
   }
 
   edgeX(index: number, length: number) {
@@ -196,14 +200,14 @@ export class AppComponent {
   }
 
   intersectX(sheetConfig, stageIndex, aspectIndex) {
-    const angle = this.lineAngle(stageIndex, sheetConfig.numberOfCircles);
+    const angle = this.lineAngle(stageIndex, sheetConfig.numberOfLines);
     const x = this.circles[aspectIndex].radius * Math.sin(angle * 2 * Math.PI);
-    return x;
+    return this.centreX + x;
   }
 
   intersectY(sheetConfig, stageIndex, aspectIndex) {
-    const angle = this.lineAngle(stageIndex, sheetConfig.numberOfCircles);
+    const angle = this.lineAngle(stageIndex, sheetConfig.numberOfLines);
     const y = this.circles[aspectIndex].radius * Math.cos(angle * 2 * Math.PI);
-    return y;
+    return this.centreY + y;
   }
 }

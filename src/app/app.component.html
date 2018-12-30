@@ -45,6 +45,38 @@
       {{line.title}}
     </text>
   </g>
+
+  <g *ngFor="let item of items; index as i">
+    <path *ngFor="let arc of item.itemArcs"
+          stroke="blue"
+          stroke-width="5"
+          fill-opacity="0"
+          [attr.d]="'M ' + arc.startX + ',' + arc.startY +
+                    'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 0 ' + arc.endX + ',' + arc.endY" />
+  </g>
+
+  <!-- Example arcs! -->
+  <!-- <path stroke="blue"
+        stroke-width="5"
+        fill-opacity="0"
+        d="M 1000,550
+           A 50,50 0 0 0 1050,500" />
+  <path stroke="red"
+        stroke-width="5"
+        fill-opacity="0"
+        d="M 1000,550
+           A 50,50 0 1 0 1050,500" />
+  <path stroke="green"
+        stroke-width="5"
+        fill-opacity="0"
+        d="M 1000,550
+           A 50,50 0 0 1 1050,500" />
+  <path stroke="brown"
+        stroke-width="5"
+        fill-opacity="0"
+        d="M 1000,550
+           A 50,50 0 1 1 1050,500" /> -->
+
 </svg>
 
 
