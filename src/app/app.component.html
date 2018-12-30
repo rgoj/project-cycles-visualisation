@@ -5,7 +5,7 @@
   <g *ngFor="let circle of circles; index as i">
     <circle [attr.cx]="centreX"
             [attr.cy]="centreY"
-            [attr.r]="(i + 1) * circleRadialDistance"
+            [attr.r]="circle.radius"
             stroke="black"
             stroke-width="1"
             fill="none" />

@@ -63,10 +63,15 @@ export class AppComponent {
     }
     console.log(this.lines);
 
-    for (let i = indexFirstCircle; i <= indexLastCircle; i++) {
-      this.circles.push({ title: sheetConfig.headings[i] });
+    this.circleRadialDistance = this.radius / (sheetConfig.numberOfCircles + 1);
+    console.log(this.circleRadialDistance);
+
+    for (let i = 0; i <= sheetConfig.numberOfCircles; i++) {
+      this.circles.push({
+        title: sheetConfig.headings[i + indexFirstCircle],
+        radius: this.circleRadialDistance * (i + 1)
+      });
     }
-    this.circleRadialDistance = this.radius / this.circles.length;
     console.log(this.circles);
 
 
@@ -95,7 +100,14 @@ export class AppComponent {
         ) {
           arcLastStage = stage - 1;
 
-          item.itemArcs.push(this.createArc(arcFirstStage, arcLastStage));
+          item.itemArcs.push(
+            this.createArc(
+              sheetConfig,
+              arcFirstStage,
+              arcLastStage,
+              item.primaryAspect.aspectIndex
+            )
+          );
           
           arcFirstStage = null;
           arcLastStage = null;
@@ -124,7 +136,12 @@ export class AppComponent {
     return primaryAspect;
   }
 
-  createArc(firstStageIndex: number, lastStageIndex: number): ItemArc {
+  createArc(
+    sheetConfig,
+    firstStageIndex: number,
+    lastStageIndex: number,
+    aspectIndex: number
+  ): ItemArc {
     const itemArc: ItemArc = {
       firstStageIndex: firstStageIndex,
       lastStageIndex: lastStageIndex, 
@@ -132,10 +149,14 @@ export class AppComponent {
       firstStageName: this.lines[firstStageIndex].title,
       lastStageName: this.lines[lastStageIndex].title,
 
-      arcStartX: 0,
-      arcStartY: 0,
-      arcEndX: 0,
-      arcEndY: 0,
+      aspectIndex: aspectIndex,
+      aspectName: this.circles[aspectIndex].title,
+
+      arcRadius: this.circles[aspectIndex].radius,
+      arcStartX: this.intersectX(sheetConfig, firstStageIndex, aspectIndex),
+      arcStartY: this.intersectY(sheetConfig, firstStageIndex, aspectIndex),
+      arcEndX: this.intersectX(sheetConfig, lastStageIndex, aspectIndex),
+      arcEndY: this.intersectY(sheetConfig, lastStageIndex, aspectIndex),
     } 
     console.log('Adding arc')
     return itemArc;
@@ -171,6 +192,18 @@ export class AppComponent {
   edgeY(index: number, length: number) {
     const angle = this.lineAngle(index, length);
     const y = this.radius * Math.cos(angle * 2 * Math.PI);
+    return y;
+  }
+
+  intersectX(sheetConfig, stageIndex, aspectIndex) {
+    const angle = this.lineAngle(stageIndex, sheetConfig.numberOfCircles);
+    const x = this.circles[aspectIndex].radius * Math.sin(angle * 2 * Math.PI);
+    return x;
+  }
+
+  intersectY(sheetConfig, stageIndex, aspectIndex) {
+    const angle = this.lineAngle(stageIndex, sheetConfig.numberOfCircles);
+    const y = this.circles[aspectIndex].radius * Math.cos(angle * 2 * Math.PI);
     return y;
   }
 }

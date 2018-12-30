@@ -1,10 +1,14 @@
 export interface ItemArc {
-  firstStageName: string;
-  lastStageName: string;
-
   firstStageIndex: number;
   lastStageIndex: number;
 
+  firstStageName: string;
+  lastStageName: string;
+
+  aspectIndex: number,
+  aspectName: string,
+
+  arcRadius: number,
   arcStartX: number;
   arcStartY: number;
   arcEndX: number;
