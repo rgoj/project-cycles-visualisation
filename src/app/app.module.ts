@@ -7,11 +7,13 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CacheInterceptor } from './services/cache.interceptor';
+import { DiagramFirstDraftComponent } from './components/diagram-first-draft/diagram-first-draft.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DiagramFirstDraftComponent,
   ],
   imports: [
     BrowserModule,
