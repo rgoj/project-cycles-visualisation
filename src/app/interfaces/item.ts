@@ -28,18 +28,22 @@ export class Aspect {
 }
 
 export class Item {
+  text: string;
+
   // aspects: Aspect[];
   primaryAspect: Aspect;
 
-  itemArcs: ItemArc[];
+  arcs: ItemArc[];
 
   lineStartX: number;
   lineStartY: number;
     
   constructor() {
-        this.itemArcs = [];
+    this.text = '';
 
-        this.lineStartX = null;
-        this.lineStartY = null;
-    }
+    this.arcs = [];
+
+    this.lineStartX = null;
+    this.lineStartY = null;
+  }
 }

@@ -47,12 +47,48 @@
   </g>
 
   <g *ngFor="let item of items; index as i">
-    <path *ngFor="let arc of item.itemArcs"
+    <path *ngFor="let arc of item.arcs"
           stroke="blue"
           stroke-width="5"
           fill-opacity="0"
           [attr.d]="'M ' + arc.startX + ',' + arc.startY +
                     'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 0 ' + arc.endX + ',' + arc.endY" />
+
+    <line [attr.x1]="item.arcs[0].startX"
+          [attr.y1]="item.arcs[0].startY"
+          [attr.x2]="lines[item.arcs[0].firstStageIndex].edgeX"
+          [attr.y2]="lines[item.arcs[0].firstStageIndex].edgeY"
+          stroke="blue"
+          stroke-width="5" />
+
+    <!-- <text [attr.x]="item.arcs[0].startX" [attr.y]="item.arcs[0].startY">
+      {{item.text}}
+    </text> -->
+
+    <foreignObject width="250"
+                   height="300"
+                   [attr.transform]="'translate(' +
+                               item.arcs[0].startX + ', ' +
+                               item.arcs[0].startY +
+                             ')
+                             rotate(' + (270 - 360 * lines[item.arcs[0].firstStageIndex].angle) + ')
+                             translate(-255, -55)
+                            '">
+      <xhtml:p class="item-text" xmlns="http://www.w3.org/1999/xhtml">
+        {{item.text}}
+      </xhtml:p>
+    </foreignObject>
+
+    <!-- <text [attr.transform]="'translate(' +
+                               lines[item.arcs[0].firstStageIndex].edgeX + ', ' +
+                               lines[item.arcs[0].firstStageIndex].edgeY +
+                             ')
+                             rotate(' + (270 - 360 * lines[item.arcs[0].firstStageIndex].angle) + ')
+                             translate(5, -5)
+                            '">
+      {{item.text}}
+    </text> -->
+    
   </g>
 
   <!-- Example arcs! -->

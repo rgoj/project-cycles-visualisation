@@ -76,10 +76,12 @@ export class AppComponent {
 
 
     for (let i = sheetConfig.indexFirstItem; i < sheetConfig.indexFirstItem + 1; i++) {
-    // for (let i = indexFirstItem; i < this.data.values.length; i++) {
+    // for (let i = sheetConfig.indexFirstItem; i < this.data.values.length; i++) {
       console.log('Processing row ' + i);
       const itemRow = this.data.values[i];
       const item = new Item();
+
+      item.text = itemRow[1];
 
       item.primaryAspect = this.processItemAspects(sheetConfig, itemRow);
 
@@ -100,7 +102,7 @@ export class AppComponent {
         ) {
           arcLastStage = stage - 1;
 
-          item.itemArcs.push(
+          item.arcs.push(
             this.createArc(
               sheetConfig,
               arcFirstStage,
