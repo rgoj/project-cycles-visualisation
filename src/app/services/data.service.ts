@@ -21,6 +21,8 @@ export class DataService {
   radius = 490;
   circleRadialDistance;
 
+  sheetConfig;
+
   stages = [];
   subsystems = [];
   entries: Entry[] = [];
@@ -30,6 +32,7 @@ export class DataService {
       this.rawData = data;
       this.processData();
       this.data.next({
+        sheetConfig: this.sheetConfig,
         stages: this.stages,
         subsystems: this.subsystems,
         entries: this.entries
@@ -48,7 +51,7 @@ export class DataService {
     const indexFirstSubsystem = this.convertColumn('Z');
     const indexLastSubsystem = this.convertColumn('AK');
 
-    const sheetConfig = {
+    this.sheetConfig = {
       headings: this.rawData.values[0],
 
       indexFirstStage: indexFirstStage,
@@ -62,42 +65,42 @@ export class DataService {
       indexFirstEntry: 1,
     }
 
-    for (let i = 0; i <= sheetConfig.numberOfStages; i++) {
+    for (let i = 0; i <= this.sheetConfig.numberOfStages; i++) {
       this.stages.push({
-        title: sheetConfig.headings[indexFirstStage + i],
-        angle: this.lineAngle(i, sheetConfig.numberOfStages),
-        edgeX: this.centreX + this.edgeX(i, sheetConfig.numberOfStages),
-        edgeY: this.centreY + this.edgeY(i, sheetConfig.numberOfStages)
+        title: this.sheetConfig.headings[indexFirstStage + i],
+        angle: this.lineAngle(i, this.sheetConfig.numberOfStages),
+        edgeX: this.centreX + this.edgeX(i, this.sheetConfig.numberOfStages),
+        edgeY: this.centreY + this.edgeY(i, this.sheetConfig.numberOfStages)
       });
     }
     console.log(this.stages);
 
-    this.circleRadialDistance = this.radius / (sheetConfig.numberOfSubsystems + 1);
+    this.circleRadialDistance = this.radius / (this.sheetConfig.numberOfSubsystems + 1);
     console.log(this.circleRadialDistance);
 
-    for (let i = 0; i <= sheetConfig.numberOfSubsystems; i++) {
+    for (let i = 0; i <= this.sheetConfig.numberOfSubsystems; i++) {
       this.subsystems.push({
-        title: sheetConfig.headings[i + indexFirstSubsystem],
+        title: this.sheetConfig.headings[i + indexFirstSubsystem],
         radius: this.circleRadialDistance * (i + 1)
       });
     }
     console.log(this.subsystems);
 
 
-    for (let i = sheetConfig.indexFirstEntry; i < sheetConfig.indexFirstEntry + 1; i++) {
-    // for (let i = sheetConfig.indexFirstEntry; i < this.rawData.values.length; i++) {
+    for (let i = this.sheetConfig.indexFirstEntry; i < this.sheetConfig.indexFirstEntry + 1; i++) {
+    // for (let i = this.sheetConfig.indexFirstEntry; i < this.rawData.values.length; i++) {
       console.log('Processing row ' + i);
       const itemRow = this.rawData.values[i];
       const item = new Entry();
 
       item.text = itemRow[1];
 
-      item.primaryAspect = this.processEntryAspects(sheetConfig, itemRow);
+      item.primaryAspect = this.processEntryAspects(this.sheetConfig, itemRow);
 
       // TODO: Move to "processEntryStages";
       let arcFirstStage: null|number = null;
       let arcLastStage: null|number = null;
-      for (let stage = 0; stage <= sheetConfig.numberOfStages + 1; stage++) {
+      for (let stage = 0; stage <= this.sheetConfig.numberOfStages + 1; stage++) {
         const stageColumn = indexFirstStage + stage;
         const stageState = itemRow[stageColumn];
 
@@ -113,7 +116,7 @@ export class DataService {
 
           item.arcs.push(
             this.createArc(
-              sheetConfig,
+              this.sheetConfig,
               arcFirstStage,
               arcLastStage,
               item.primaryAspect.aspectIndex
