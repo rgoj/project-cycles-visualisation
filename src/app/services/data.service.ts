@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Entry, EntryArc, Subsystem, EntrySubsystem, EntryStage } from '../interfaces/item';
+import { Entry, Subsystem, EntrySubsystem, EntryStage } from '../interfaces/item';
 import { GoogleSheetsService } from './google-sheets.service';
 
 @Injectable({
