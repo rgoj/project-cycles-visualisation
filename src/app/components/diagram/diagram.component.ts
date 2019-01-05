@@ -19,9 +19,9 @@ export class DiagramComponent {
   radius = 490;
   circleRadialDistance;
 
-  lines;
-  circles;
-  items;
+  stages;
+  subsystems;
+  entries;
 
   constructor(private dataService: DataService) {
     this.dataService.getData().subscribe((data) => {
@@ -33,11 +33,11 @@ export class DiagramComponent {
       if(data) {
         console.log('...which looks like real data, initialising diagram!');
 
-        this.lines = data.stages;
-        this.circles = data.subsystems;
-        this.items = data.entries;
+        this.stages = data.stages;
+        this.subsystems = data.subsystems;
+        this.entries = data.entries;
 
-        this.circleRadialDistance = this.radius / (this.circles.length + 1);
+        this.circleRadialDistance = this.radius / (this.subsystems.length + 1);
       }
     });
   }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Item, ItemArc, Aspect } from '../../interfaces/item';
+import { Entry, EntryArc, Aspect } from '../../interfaces/item';
 import { GoogleSheetsService } from '../../services/google-sheets.service';
 
 @Component({
@@ -20,9 +20,9 @@ export class DiagramFirstDraftComponent {
   radius = 490;
   circleRadialDistance;
 
-  circles = [];
-  lines = [];
-  items: Item[] = [];
+  stages = [];
+  subsystems = [];
+  entries: Entry[] = [];
 
   constructor(private googleSheets: GoogleSheetsService) {
     this.googleSheets.getData().subscribe((data) => {
@@ -32,63 +32,63 @@ export class DiagramFirstDraftComponent {
   }
 
   processData() {
-    const indexFirstLine = this.convertColumn('L');
-    const indexLastLine = this.convertColumn('Y');
+    const indexFirstStage = this.convertColumn('L');
+    const indexLastStage = this.convertColumn('Y');
 
-    const indexFirstCircle = this.convertColumn('Z');
-    const indexLastCircle = this.convertColumn('AK');
+    const indexFirstSubsystem = this.convertColumn('Z');
+    const indexLastSubsystem = this.convertColumn('AK');
 
     const sheetConfig = {
       headings: this.data.values[0],
 
-      indexFirstLine: indexFirstLine,
-      indexLastLine: indexLastLine,
-      numberOfLines: indexLastLine - indexFirstLine,
+      indexFirstStage: indexFirstStage,
+      indexLastStage: indexLastStage,
+      numberOfStages: indexLastStage - indexFirstStage,
 
-      indexFirstCircle: indexFirstCircle,
-      indexLastCircle: indexLastCircle,
-      numberOfCircles: indexLastCircle - indexFirstCircle,
+      indexFirstSubsystem: indexFirstSubsystem,
+      indexLastSubsystem: indexLastSubsystem,
+      numberOfSubsystems: indexLastSubsystem - indexFirstSubsystem,
 
-      indexFirstItem: 1,
+      indexFirstEntry: 1,
     }
 
-    for (let i = 0; i <= sheetConfig.numberOfLines; i++) {
-      this.lines.push({
-        title: sheetConfig.headings[indexFirstLine + i],
-        angle: this.lineAngle(i, sheetConfig.numberOfLines),
-        edgeX: this.centreX + this.edgeX(i, sheetConfig.numberOfLines),
-        edgeY: this.centreY + this.edgeY(i, sheetConfig.numberOfLines)
+    for (let i = 0; i <= sheetConfig.numberOfStages; i++) {
+      this.stages.push({
+        title: sheetConfig.headings[indexFirstStage + i],
+        angle: this.lineAngle(i, sheetConfig.numberOfStages),
+        edgeX: this.centreX + this.edgeX(i, sheetConfig.numberOfStages),
+        edgeY: this.centreY + this.edgeY(i, sheetConfig.numberOfStages)
       });
     }
-    console.log(this.lines);
+    console.log(this.stages);
 
-    this.circleRadialDistance = this.radius / (sheetConfig.numberOfCircles + 1);
+    this.circleRadialDistance = this.radius / (sheetConfig.numberOfSubsystems + 1);
     console.log(this.circleRadialDistance);
 
-    for (let i = 0; i <= sheetConfig.numberOfCircles; i++) {
-      this.circles.push({
-        title: sheetConfig.headings[i + indexFirstCircle],
+    for (let i = 0; i <= sheetConfig.numberOfSubsystems; i++) {
+      this.subsystems.push({
+        title: sheetConfig.headings[i + indexFirstSubsystem],
         radius: this.circleRadialDistance * (i + 1)
       });
     }
-    console.log(this.circles);
+    console.log(this.subsystems);
 
 
-    for (let i = sheetConfig.indexFirstItem; i < sheetConfig.indexFirstItem + 1; i++) {
-    // for (let i = sheetConfig.indexFirstItem; i < this.data.values.length; i++) {
+    for (let i = sheetConfig.indexFirstEntry; i < sheetConfig.indexFirstEntry + 1; i++) {
+    // for (let i = sheetConfig.indexFirstEntry; i < this.data.values.length; i++) {
       console.log('Processing row ' + i);
       const itemRow = this.data.values[i];
-      const item = new Item();
+      const item = new Entry();
 
       item.text = itemRow[1];
 
-      item.primaryAspect = this.processItemAspects(sheetConfig, itemRow);
+      item.primaryAspect = this.processEntryAspects(sheetConfig, itemRow);
 
-      // TODO: Move to "processItemStages";
+      // TODO: Move to "processEntryStages";
       let arcFirstStage: null|number = null;
       let arcLastStage: null|number = null;
-      for (let stage = 0; stage <= sheetConfig.numberOfLines + 1; stage++) {
-        const stageColumn = indexFirstLine + stage;
+      for (let stage = 0; stage <= sheetConfig.numberOfStages + 1; stage++) {
+        const stageColumn = indexFirstStage + stage;
         const stageState = itemRow[stageColumn];
 
         if (stageState === 'YES' && arcFirstStage === null) {
@@ -97,7 +97,7 @@ export class DiagramFirstDraftComponent {
 
         if (
           stageState !== 'YES' && arcFirstStage !== null && arcLastStage === null ||
-          stageState === 'YES' && stageColumn === indexLastLine
+          stageState === 'YES' && stageColumn === indexLastStage
         ) {
           arcLastStage = stage - 1;
 
@@ -117,20 +117,20 @@ export class DiagramFirstDraftComponent {
 
       console.log('Adding the following item:');
       console.log(item);
-      this.items.push(item);
+      this.entries.push(item);
     }
 
   }
 
-  processItemAspects(sheetConfig, itemRow: []): Aspect {
+  processEntryAspects(sheetConfig, itemRow: []): Aspect {
     const primaryAspect = new Aspect;
 
-    for (let aspect = 0; aspect < sheetConfig.numberOfLines; aspect++) {
-      const aspectColumn = sheetConfig.indexFirstCircle + aspect;
+    for (let aspect = 0; aspect < sheetConfig.numberOfStages; aspect++) {
+      const aspectColumn = sheetConfig.indexFirstSubsystem + aspect;
       const aspectState = itemRow[aspectColumn];
       if (aspectState === 'PRIMARY') {
         primaryAspect.aspectIndex = aspect;
-        primaryAspect.aspectName = this.circles[aspect].title;
+        primaryAspect.aspectName = this.subsystems[aspect].title;
       }
     }
 
@@ -142,20 +142,20 @@ export class DiagramFirstDraftComponent {
     firstStageIndex: number,
     lastStageIndex: number,
     aspectIndex: number
-  ): ItemArc {
-    const largeArcFlag = (lastStageIndex - firstStageIndex) / sheetConfig.numberOfLines > 0.5 ? 1 : 0;
+  ): EntryArc {
+    const largeArcFlag = (lastStageIndex - firstStageIndex) / sheetConfig.numberOfStages > 0.5 ? 1 : 0;
 
-    const itemArc: ItemArc = {
+    const EntryArc: EntryArc = {
       firstStageIndex: firstStageIndex,
       lastStageIndex: lastStageIndex, 
 
-      firstStageName: this.lines[firstStageIndex].title,
-      lastStageName: this.lines[lastStageIndex].title,
+      firstStageName: this.stages[firstStageIndex].title,
+      lastStageName: this.stages[lastStageIndex].title,
 
       aspectIndex: aspectIndex,
-      aspectName: this.circles[aspectIndex].title,
+      aspectName: this.subsystems[aspectIndex].title,
 
-      radius: this.circles[aspectIndex].radius,
+      radius: this.subsystems[aspectIndex].radius,
       startX: this.intersectX(sheetConfig, firstStageIndex, aspectIndex),
       startY: this.intersectY(sheetConfig, firstStageIndex, aspectIndex),
       endX: this.intersectX(sheetConfig, lastStageIndex + 1, aspectIndex),
@@ -164,7 +164,7 @@ export class DiagramFirstDraftComponent {
       largeArcFlag: largeArcFlag,
     } 
     console.log('Adding arc')
-    return itemArc;
+    return EntryArc;
   }
 
 
@@ -201,14 +201,14 @@ export class DiagramFirstDraftComponent {
   }
 
   intersectX(sheetConfig, stageIndex, aspectIndex) {
-    const angle = this.lineAngle(stageIndex, sheetConfig.numberOfLines);
-    const x = this.circles[aspectIndex].radius * Math.sin(angle * 2 * Math.PI);
+    const angle = this.lineAngle(stageIndex, sheetConfig.numberOfStages);
+    const x = this.subsystems[aspectIndex].radius * Math.sin(angle * 2 * Math.PI);
     return this.centreX + x;
   }
 
   intersectY(sheetConfig, stageIndex, aspectIndex) {
-    const angle = this.lineAngle(stageIndex, sheetConfig.numberOfLines);
-    const y = this.circles[aspectIndex].radius * Math.cos(angle * 2 * Math.PI);
+    const angle = this.lineAngle(stageIndex, sheetConfig.numberOfStages);
+    const y = this.subsystems[aspectIndex].radius * Math.cos(angle * 2 * Math.PI);
     return this.centreY + y;
   }
 }

@@ -1,4 +1,4 @@
-export interface ItemArc {
+export interface EntryArc {
   firstStageIndex: number;
   lastStageIndex: number;
 
@@ -27,23 +27,23 @@ export class Aspect {
   }
 }
 
-export class Item {
+export class Entry {
   text: string;
 
   // aspects: Aspect[];
   primaryAspect: Aspect;
 
-  arcs: ItemArc[];
+  arcs: EntryArc[];
 
-  lineStartX: number;
-  lineStartY: number;
+  stageStartX: number;
+  stageStartY: number;
     
   constructor() {
     this.text = '';
 
     this.arcs = [];
 
-    this.lineStartX = null;
-    this.lineStartY = null;
+    this.stageStartX = null;
+    this.stageStartY = null;
   }
 }
