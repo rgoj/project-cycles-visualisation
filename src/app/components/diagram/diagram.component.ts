@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Item, ItemArc, Aspect } from '../../interfaces/item';
-import { GoogleSheetsService } from '../../services/google-sheets.service';
+import { DataService } from '../../services/data.service';
 
 
 @Component({
@@ -25,8 +25,8 @@ export class DiagramComponent {
   lines = [];
   items: Item[] = [];
 
-  constructor(private googleSheets: GoogleSheetsService) {
-    this.googleSheets.getData().subscribe((data) => {
+  constructor(private dataService: DataService) {
+    this.dataService.getData().subscribe((data) => {
       this.data = data;
       this.processData();
     });
