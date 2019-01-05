@@ -12,15 +12,6 @@ export class DataService {
   rawData: any;
   data = new BehaviorSubject<any>(null);
 
-  title = 'lm-joint-showcase';
-  scale = 1000;
-
-  centreX = this.scale;
-  centreY = this.scale / 2;
-
-  radius = 490;
-  circleRadialDistance;
-
   sheetConfig;
 
   stages = [];
