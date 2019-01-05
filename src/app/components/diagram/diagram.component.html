@@ -2,7 +2,7 @@
   [attr.viewBox]="'0 0 ' + 2 * scale + ' ' + scale"
   preserveAspectRatio="xMinYMin meet">
 
-  <g *ngFor="let circle of subsystemCircles; index as i">
+  <!-- <g *ngFor="let circle of subsystemCircles; index as i">
     <circle [attr.cx]="centreX"
             [attr.cy]="centreY"
             [attr.r]="circle.radius"
@@ -19,7 +19,7 @@
           style="transform-origin: 50% 50%;">
       {{circle.subsystem.title}}
     </text>
-  </g>
+  </g> -->
 
   <g *ngFor="let line of stageLines; index as i">
     <line class="stage__line"
@@ -46,10 +46,17 @@
     </text>
   </g>
 
-  <g *ngFor="let entry of entries; index as i">
+  <g *ngFor="let entry of entryViews; index as i" class="entry">
+    <circle [attr.cx]="centreX"
+            [attr.cy]="centreY"
+            [attr.r]="entry.radius"
+            stroke="black"
+            stroke-width="1"
+            fill="none" />
+
     <path *ngFor="let arc of entry.arcs"
           stroke="blue"
-          stroke-width="5"
+          stroke-width="1"
           fill-opacity="0"
           [attr.d]="'M ' + arc.startX + ',' + arc.startY +
                     'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 0 ' + arc.endX + ',' + arc.endY" />

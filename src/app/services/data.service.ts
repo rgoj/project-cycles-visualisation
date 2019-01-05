@@ -73,8 +73,8 @@ export class DataService {
     console.log(this.subsystems);
 
 
-    for (let i = this.sheetConfig.indexFirstEntry; i < this.sheetConfig.indexFirstEntry + 1; i++) {
-    // for (let i = this.sheetConfig.indexFirstEntry; i < this.rawData.values.length; i++) {
+    // for (let i = this.sheetConfig.indexFirstEntry; i < this.sheetConfig.indexFirstEntry + 1; i++) {
+    for (let i = this.sheetConfig.indexFirstEntry; i < this.rawData.values.length; i++) {
       console.log('Processing row ' + i);
       const entryRow = this.rawData.values[i];
       const entry = new Entry();

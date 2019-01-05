@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { DataService } from '../../services/data.service';
-import { SubsystemCircle } from 'src/app/interfaces/item';
+import { Entry, SubsystemCircle, EntryView } from 'src/app/interfaces/item';
 
 
 @Component({
@@ -16,13 +16,14 @@ export class DiagramComponent {
   centreY = this.scale / 2;
 
   radius = 490;
+  smallestRadius = 20; 
   circleRadialDistance;
 
   sheetConfig;
 
   stageLines;
   subsystemCircles;
-  entries;
+  entryViews;
 
   constructor(private dataService: DataService) {
     this.dataService.getData().subscribe((data) => {
@@ -40,7 +41,7 @@ export class DiagramComponent {
         this.subsystemCircles = data.subsystems.map(
           subsystem => this.calculateSubsystemCircle(subsystem)
         );
-        this.entries = data.entries;
+        this.entryViews = this.buildViewsFromEntries(data.entries);
       }
     });
   }
@@ -60,11 +61,70 @@ export class DiagramComponent {
     return new SubsystemCircle(subsystem, this.circleRadialDistance * (subsystem.index + 1));
   }
 
+  buildViewsFromEntries(entries: Entry[]): EntryView[] {
+    const entryViews: EntryView[] = [];
+
+    const radiusIncrement = (this.radius - this.smallestRadius) / (entries.length - 1)
+
+    for(let iEntry = 0; iEntry < entries.length; iEntry++) {
+      const entry = entries[iEntry];
+      const entryView = new EntryView(entry);
+
+      const radius = this.smallestRadius + iEntry * radiusIncrement;
+
+      for (let iEntryStage = 0; iEntryStage < entry.stages.length; iEntryStage++) {
+        const entryStage = entry.stages[iEntryStage];
+        const startAngle = this.findStageAngle(entryStage.startStage);
+        // TODO: Remove the hardcoded value and replace with angular width of endStage!!!
+        const endAngle = this.findStageAngle(entryStage.endStage) + (1 / 14);
+
+        const arc = {
+          radius: radius,
+          startAngle: startAngle,
+          endAngle: endAngle,
+          startX: this.radialX(startAngle, radius),
+          startY: this.radialY(startAngle, radius),
+          endX: this.radialX(endAngle, radius),
+          endY: this.radialY(endAngle, radius),
+          largeArcFlag: (entryStage.endStage.index - entryStage.startStage.index) / this.sheetConfig.numberOfStages > 0.5 ? 1 : 0,
+        }
+
+        entryView.arcs.push(arc);
+      }
+
+      entryViews.push(entryView);
+    }
+
+    return entryViews;
+  }
+
+
+
+
   /*
-   * Helper functions
+   * Helper function: medium abstraction
+   */
+  findStageAngle(stage) {
+    return this.stageLines.find(line => line.stage == stage).angle;
+  }
+
+  /*
+   * Helper functions: smallest abstraction
    */
   lineAngle(index: number, length: number) {
     return index / (length + 1);
+  }
+
+  radialX(angle, radius, fromCentre=true) {
+    let x = radius * Math.sin(angle * 2 * Math.PI);
+    if (fromCentre) { x += this.centreX; }
+    return x;
+  }
+
+  radialY(angle, radius, fromCentre=true) {
+    let y = radius * Math.cos(angle * 2 * Math.PI);
+    if (fromCentre) { y += this.centreY; }
+    return y;
   }
 
   edgeX(index: number, length: number) {

@@ -65,7 +65,13 @@ export class EntryStage {
 }
 
 export class EntryView {
-  primaryArcs: EntryArc[];
+  entry: Entry;
+  arcs: any;
+
+  constructor(entry: Entry) {
+    this.entry = entry;
+    this.arcs = [];
+  }
 }
 
 export interface EntryArc {
