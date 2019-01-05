@@ -2,7 +2,7 @@
   [attr.viewBox]="'0 0 ' + 2 * scale + ' ' + scale"
   preserveAspectRatio="xMinYMin meet">
 
-  <g *ngFor="let circle of subsystems; index as i">
+  <g *ngFor="let circle of subsystemCircles; index as i">
     <circle [attr.cx]="centreX"
             [attr.cy]="centreY"
             [attr.r]="circle.radius"
@@ -17,11 +17,11 @@
                                (500 + (i + 0.9) * circleRadialDistance) +
                              ')'"
           style="transform-origin: 50% 50%;">
-      {{circle.title}}
+      {{circle.subsystem.title}}
     </text>
   </g>
 
-  <g *ngFor="let line of stages; index as i">
+  <g *ngFor="let line of stageLines; index as i">
     <line class="stage__line"
           [attr.x1]="centreX"
           [attr.y1]="centreY"
@@ -42,7 +42,7 @@
                              translate(5, -5)
                             '"
           fill="red">
-      {{line.title}}
+      {{line.stage.title}}
     </text>
   </g>
 
@@ -54,18 +54,18 @@
           [attr.d]="'M ' + arc.startX + ',' + arc.startY +
                     'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 0 ' + arc.endX + ',' + arc.endY" />
 
-    <line [attr.x1]="entry.arcs[0].startX"
+    <!-- <line [attr.x1]="entry.arcs[0].startX"
           [attr.y1]="entry.arcs[0].startY"
           [attr.x2]="stages[entry.arcs[0].firstStageIndex].edgeX"
           [attr.y2]="stages[entry.arcs[0].firstStageIndex].edgeY"
           stroke="blue"
-          stroke-width="5" />
+          stroke-width="5" /> -->
 
     <!-- <text [attr.x]="entry.arcs[0].startX" [attr.y]="entry.arcs[0].startY">
       {{entry.text}}
     </text> -->
 
-    <foreignObject width="250"
+    <!-- <foreignObject width="250"
                    height="300"
                    [attr.transform]="'translate(' +
                                entry.arcs[0].startX + ', ' +
@@ -77,7 +77,7 @@
       <xhtml:p class="entry-text" xmlns="http://www.w3.org/1999/xhtml">
         {{entry.text}}
       </xhtml:p>
-    </foreignObject>
+    </foreignObject> -->
 
     <!-- <text [attr.transform]="'translate(' +
                                stages[entry.arcs[0].firstStageIndex].edgeX + ', ' +

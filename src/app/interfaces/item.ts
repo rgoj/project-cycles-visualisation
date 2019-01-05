@@ -1,22 +1,3 @@
-export interface EntryArc {
-  firstStageIndex: number;
-  lastStageIndex: number;
-
-  firstStageName: string;
-  lastStageName: string;
-
-  aspectIndex: number;
-  aspectName: string;
-
-  radius: number;
-  startX: number;
-  startY: number;
-  endX: number;
-  endY: number;
-
-  largeArcFlag: number;
-}
-
 export class Stage {
   index: number;
   name: string;
@@ -34,6 +15,16 @@ export class Subsystem {
   constructor() {
     this.index = null;
     this.name = null;
+  }
+}
+
+export class SubsystemCircle {
+  subsystem: Subsystem;
+  radius: number;
+
+  constructor(subsystem: Subsystem, radius: number) {
+    this.subsystem = subsystem;
+    this.radius = radius;
   }
 }
 
@@ -75,4 +66,23 @@ export class EntryStage {
 
 export class EntryView {
   primaryArcs: EntryArc[];
+}
+
+export interface EntryArc {
+  firstStageIndex: number;
+  lastStageIndex: number;
+
+  firstStageName: string;
+  lastStageName: string;
+
+  aspectIndex: number;
+  aspectName: string;
+
+  radius: number;
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+
+  largeArcFlag: number;
 }

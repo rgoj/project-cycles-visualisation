@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { DataService } from '../../services/data.service';
+import { SubsystemCircle } from 'src/app/interfaces/item';
 
 
 @Component({
@@ -9,8 +10,6 @@ import { DataService } from '../../services/data.service';
   styleUrls: ['./diagram.component.scss']
 })
 export class DiagramComponent {
-  data;
-
   scale = 1000;
 
   centreX = this.scale;
@@ -19,26 +18,210 @@ export class DiagramComponent {
   radius = 490;
   circleRadialDistance;
 
-  stages;
-  subsystems;
+  sheetConfig;
+
+  stageLines;
+  subsystemCircles;
   entries;
 
   constructor(private dataService: DataService) {
     this.dataService.getData().subscribe((data) => {
-      this.data = data;
-
       console.log('Subscribed to data service and received:')
       console.log(data);
 
       if(data) {
         console.log('...which looks like real data, initialising diagram!');
 
-        this.stages = data.stages;
-        this.subsystems = data.subsystems;
-        this.entries = data.entries;
+        this.sheetConfig = data.sheetConfig;
 
-        this.circleRadialDistance = this.radius / (this.subsystems.length + 1);
+        this.circleRadialDistance = this.radius / (data.subsystems.length + 1);
+
+        this.stageLines = data.stages.map(stage => this.calculateStageLine(stage));
+        this.subsystemCircles = data.subsystems.map(
+          subsystem => this.calculateSubsystemCircle(subsystem)
+        );
+        this.entries = data.entries;
       }
     });
   }
+
+  calculateStageLine(stage) {
+    const stageLine = {
+      stage: stage,
+      angle: this.lineAngle(stage.index, this.sheetConfig.numberOfStages),
+      edgeX: this.centreX + this.edgeX(stage.index, this.sheetConfig.numberOfStages),
+      edgeY: this.centreY + this.edgeY(stage.index, this.sheetConfig.numberOfStages)
+    }
+
+    return stageLine;
+  }
+
+  calculateSubsystemCircle(subsystem) {
+    return new SubsystemCircle(subsystem, this.circleRadialDistance * (subsystem.index + 1));
+  }
+
+  /*
+   * Helper functions
+   */
+  lineAngle(index: number, length: number) {
+    return index / (length + 1);
+  }
+
+  edgeX(index: number, length: number) {
+    const angle = this.lineAngle(index, length);
+    const x = this.radius * Math.sin(angle * 2 * Math.PI);
+    return x;
+  }
+
+  edgeY(index: number, length: number) {
+    const angle = this.lineAngle(index, length);
+    const y = this.radius * Math.cos(angle * 2 * Math.PI);
+    return y;
+  }
+
+
+
+
+
+
+
+
+  //  for (let i = this.sheetConfig.indexFirstEntry; i < this.sheetConfig.indexFirstEntry + 1; i++) {
+  //   // for (let i = this.sheetConfig.indexFirstEntry; i < this.rawData.values.length; i++) {
+  //     console.log('Processing row ' + i);
+  //     const entryRow = this.rawData.values[i];
+  //     const entry = new Entry();
+
+  //     entry.text = entryRow[1];
+
+  //     entry.primaryAspect = this.processEntryAspects(this.sheetConfig, entryRow);
+
+  //     // TODO: Move to "processEntryStages";
+  //     let arcFirstStage: null|number = null;
+  //     let arcLastStage: null|number = null;
+  //     for (let stage = 0; stage <= this.sheetConfig.numberOfStages + 1; stage++) {
+  //       const stageColumn = indexFirstStage + stage;
+  //       const stageState = entryRow[stageColumn];
+
+  //       if (stageState === 'YES' && arcFirstStage === null) {
+  //         arcFirstStage = stage;          
+  //       }
+
+  //       if (
+  //         stageState !== 'YES' && arcFirstStage !== null && arcLastStage === null ||
+  //         stageState === 'YES' && stageColumn === indexLastStage
+  //       ) {
+  //         arcLastStage = stage - 1;
+
+  //         entry.arcs.push(
+  //           this.createArc(
+  //             this.sheetConfig,
+  //             arcFirstStage,
+  //             arcLastStage,
+  //             entry.primaryAspect.aspectIndex
+  //           )
+  //         );
+          
+  //         arcFirstStage = null;
+  //         arcLastStage = null;
+  //       }
+  //     }
+
+  //     console.log('Adding the following item:');
+  //     console.log(entry);
+  //     this.entries.push(entry);
+  //   }
+
+  // }
+
+  // processEntryAspects(sheetConfig, itemRow: []): Aspect {
+  //   const primaryAspect = new Aspect;
+
+  //   for (let aspect = 0; aspect < sheetConfig.numberOfStages; aspect++) {
+  //     const aspectColumn = sheetConfig.indexFirstSubsystem + aspect;
+  //     const aspectState = itemRow[aspectColumn];
+  //     if (aspectState === 'PRIMARY') {
+  //       primaryAspect.aspectIndex = aspect;
+  //       primaryAspect.aspectName = this.subsystems[aspect].title;
+  //     }
+  //   }
+
+  //   return primaryAspect;
+  // }
+
+  // createArc(
+  //   sheetConfig,
+  //   firstStageIndex: number,
+  //   lastStageIndex: number,
+  //   aspectIndex: number
+  // ): EntryArc {
+  //   const largeArcFlag = (lastStageIndex - firstStageIndex) / sheetConfig.numberOfStages > 0.5 ? 1 : 0;
+
+  //   const EntryArc: EntryArc = {
+  //     firstStageIndex: firstStageIndex,
+  //     lastStageIndex: lastStageIndex, 
+
+  //     firstStageName: this.stages[firstStageIndex].title,
+  //     lastStageName: this.stages[lastStageIndex].title,
+
+  //     aspectIndex: aspectIndex,
+  //     aspectName: this.subsystems[aspectIndex].title,
+
+  //     radius: this.subsystems[aspectIndex].radius,
+  //     startX: this.intersectX(sheetConfig, firstStageIndex, aspectIndex),
+  //     startY: this.intersectY(sheetConfig, firstStageIndex, aspectIndex),
+  //     endX: this.intersectX(sheetConfig, lastStageIndex + 1, aspectIndex),
+  //     endY: this.intersectY(sheetConfig, lastStageIndex + 1, aspectIndex),
+
+  //     largeArcFlag: largeArcFlag,
+  //   } 
+  //   console.log('Adding arc')
+  //   return EntryArc;
+  // }
+
+
+  // /*
+  //  * Helper functions
+  //  */
+
+  // // Converts Excel column to index
+  // // Source: https://stackoverflow.com/questions/9905533/convert-excel-column-alphabet-e-g-aa-to-number-e-g-25
+  // convertColumn(column: string) {
+  //   const base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  //   let result = 0;
+  
+  //   for (let i = 0, j = column.length - 1; i < column.length; i += 1, j -= 1) {
+  //     result += Math.pow(base.length, j) * (base.indexOf(column[i]) + 1);
+  //   }
+  //   return result - 1;
+  // };
+
+  // lineAngle(index: number, length: number) {
+  //   return index / (length + 1);
+  // }
+
+  // edgeX(index: number, length: number) {
+  //   const angle = this.lineAngle(index, length);
+  //   const x = this.radius * Math.sin(angle * 2 * Math.PI);
+  //   return x;
+  // }
+
+  // edgeY(index: number, length: number) {
+  //   const angle = this.lineAngle(index, length);
+  //   const y = this.radius * Math.cos(angle * 2 * Math.PI);
+  //   return y;
+  // }
+
+  // intersectX(sheetConfig, stageIndex, aspectIndex) {
+  //   const angle = this.lineAngle(stageIndex, sheetConfig.numberOfStages);
+  //   const x = this.subsystems[aspectIndex].radius * Math.sin(angle * 2 * Math.PI);
+  //   return this.centreX + x;
+  // }
+
+  // intersectY(sheetConfig, stageIndex, aspectIndex) {
+  //   const angle = this.lineAngle(stageIndex, sheetConfig.numberOfStages);
+  //   const y = this.subsystems[aspectIndex].radius * Math.cos(angle * 2 * Math.PI);
+  //   return this.centreY + y;
+  // }
+
 }

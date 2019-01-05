@@ -101,7 +101,6 @@ export class DataService {
 
       const columnIndex = this.sheetConfig.indexFirstSubsystem + i;
       const state = entryRow[columnIndex];
-      console.log(state);
       let status: string = null;
 
       subsystem.index = i;
