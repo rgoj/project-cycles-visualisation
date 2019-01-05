@@ -1,3 +1,119 @@
-<p>
-  diagram works!
-</p>
+<svg xmlns="http://www.w3.org/2000/svg"
+  [attr.viewBox]="'0 0 ' + 2 * scale + ' ' + scale"
+  preserveAspectRatio="xMinYMin meet">
+
+  <g *ngFor="let circle of circles; index as i">
+    <circle [attr.cx]="centreX"
+            [attr.cy]="centreY"
+            [attr.r]="circle.radius"
+            stroke="black"
+            stroke-width="1"
+            fill="none" />
+
+    <text class="aspect__text"
+          [attr.transform]="'rotate(270)
+                             translate(' +
+                               (scale) + ', ' +
+                               (500 + (i + 0.9) * circleRadialDistance) +
+                             ')'"
+          style="transform-origin: 50% 50%;">
+      {{circle.title}}
+    </text>
+  </g>
+
+  <g *ngFor="let line of lines; index as i">
+    <line class="stage__line"
+          [attr.x1]="centreX"
+          [attr.y1]="centreY"
+          [attr.x2]="line.edgeX"
+          [attr.y2]="line.edgeY"
+          stroke="red"
+          stroke-width="1" />
+
+          <!-- [attr.x2]="centreX + edgeX(i, lines.length)"
+          [attr.y2]="centreY - edgeY(i, lines.length)" -->
+
+    <text class="stage__text"
+          [attr.transform]="'translate(' +
+                               line.edgeX + ', ' +
+                               (line.edgeY) +
+                             ')
+                             rotate(' + (270 - 360 * line.angle) + ')
+                             translate(5, -5)
+                            '"
+          fill="red">
+      {{line.title}}
+    </text>
+  </g>
+
+  <g *ngFor="let item of items; index as i">
+    <path *ngFor="let arc of item.arcs"
+          stroke="blue"
+          stroke-width="5"
+          fill-opacity="0"
+          [attr.d]="'M ' + arc.startX + ',' + arc.startY +
+                    'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 0 ' + arc.endX + ',' + arc.endY" />
+
+    <line [attr.x1]="item.arcs[0].startX"
+          [attr.y1]="item.arcs[0].startY"
+          [attr.x2]="lines[item.arcs[0].firstStageIndex].edgeX"
+          [attr.y2]="lines[item.arcs[0].firstStageIndex].edgeY"
+          stroke="blue"
+          stroke-width="5" />
+
+    <!-- <text [attr.x]="item.arcs[0].startX" [attr.y]="item.arcs[0].startY">
+      {{item.text}}
+    </text> -->
+
+    <foreignObject width="250"
+                   height="300"
+                   [attr.transform]="'translate(' +
+                               item.arcs[0].startX + ', ' +
+                               item.arcs[0].startY +
+                             ')
+                             rotate(' + (270 - 360 * lines[item.arcs[0].firstStageIndex].angle) + ')
+                             translate(-255, -55)
+                            '">
+      <xhtml:p class="item-text" xmlns="http://www.w3.org/1999/xhtml">
+        {{item.text}}
+      </xhtml:p>
+    </foreignObject>
+
+    <!-- <text [attr.transform]="'translate(' +
+                               lines[item.arcs[0].firstStageIndex].edgeX + ', ' +
+                               lines[item.arcs[0].firstStageIndex].edgeY +
+                             ')
+                             rotate(' + (270 - 360 * lines[item.arcs[0].firstStageIndex].angle) + ')
+                             translate(5, -5)
+                            '">
+      {{item.text}}
+    </text> -->
+    
+  </g>
+
+  <!-- Example arcs! -->
+  <!-- <path stroke="blue"
+        stroke-width="5"
+        fill-opacity="0"
+        d="M 1000,550
+           A 50,50 0 0 0 1050,500" />
+  <path stroke="red"
+        stroke-width="5"
+        fill-opacity="0"
+        d="M 1000,550
+           A 50,50 0 1 0 1050,500" />
+  <path stroke="green"
+        stroke-width="5"
+        fill-opacity="0"
+        d="M 1000,550
+           A 50,50 0 0 1 1050,500" />
+  <path stroke="brown"
+        stroke-width="5"
+        fill-opacity="0"
+        d="M 1000,550
+           A 50,50 0 1 1 1050,500" /> -->
+
+</svg>
+
+
+<!-- <router-outlet></router-outlet> -->
