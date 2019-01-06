@@ -26,9 +26,7 @@
           [attr.x1]="centreX"
           [attr.y1]="centreY"
           [attr.x2]="line.edgeX"
-          [attr.y2]="line.edgeY"
-          stroke="red"
-          stroke-width="1" />
+          [attr.y2]="line.edgeY" />
 
           <!-- [attr.x2]="centreX + edgeX(i, stages.length)"
           [attr.y2]="centreY - edgeY(i, stages.length)" -->
@@ -40,24 +38,21 @@
                              ')
                              rotate(' + (270 - 360 * line.angle) + ')
                              translate(5, -5)
-                            '"
-          fill="red">
+                            '">
       {{line.stage.title}}
     </text>
   </g>
 
-  <g *ngFor="let entry of entryViews; index as i" class="entry">
+  <g *ngFor="let entry of entryViews; index as i" [attr.class]="'entry ' + entry.class">
     <circle [attr.cx]="centreX"
             [attr.cy]="centreY"
-            [attr.r]="entry.radius"
-            stroke="black"
+            [attr.r]="entry.radius"/>
+            <!-- stroke="black"
             stroke-width="1"
-            fill="none" />
+            fill="none"  -->
 
     <path *ngFor="let arc of entry.arcs"
-          stroke="blue"
-          stroke-width="1"
-          fill-opacity="0"
+          class="entry__arc"
           [attr.d]="'M ' + arc.startX + ',' + arc.startY +
                     'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 0 ' + arc.endX + ',' + arc.endY" />
 

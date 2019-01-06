@@ -67,10 +67,15 @@ export class EntryStage {
 export class EntryView {
   entry: Entry;
   arcs: any;
+  class: string;
+
+  radius: number;
 
   constructor(entry: Entry) {
     this.entry = entry;
     this.arcs = [];
+    this.class = '';
+    this.radius = null;
   }
 }
 

@@ -1,4 +1,10 @@
+.stage__line {
+  stroke: lightgray; 
+  stroke-width: 1;
+}
+
 .stage__text {
+  fill: lightgray;
   font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -9,4 +15,66 @@
 .item-text {
   font-family: Helvetica, Arial, sans-serif;
   color: blue;
+}
+
+
+.entry circle {
+  display: none;
+  // stroke: lightgray;
+  stroke-width: 1;
+  fill: none;
+}
+
+.entry__arc {
+  // stroke: blue;
+  stroke-width: 1;
+  fill-opacity: 0;
+}
+
+.primary-subsystem_individual-home {
+  stroke: darkslategray;
+}
+
+.primary-subsystem_health-wellbeing {
+  stroke: #BFC988;
+}
+
+.primary-subsystem_social {
+  stroke: #B760A0;
+}
+
+.primary-subsystem_cultural {
+  stroke: #AC8CCB;
+}
+
+.primary-subsystem_education {
+  stroke: #E6B500;
+}
+
+.primary-subsystem_ecological {
+  stroke: #81B357;
+}
+
+.primary-subsystem_technology {
+  stroke: #0082C2;
+}
+
+.primary-subsystem_economic {
+  stroke: #B7A456;
+}
+
+.primary-subsystem_political {
+  stroke: #2A4E9F;
+}
+
+.primary-subsystem_policy-regulation {
+  stroke: #88B2CC;
+}
+
+.primary-subsystem_service-profession {
+  stroke: #DA1F00;
+}
+
+.primary-subsystem_project {
+  stroke: black;
 }

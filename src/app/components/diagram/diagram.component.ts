@@ -70,7 +70,11 @@ export class DiagramComponent {
       const entry = entries[iEntry];
       const entryView = new EntryView(entry);
 
+      const subsystemClass = this.createClassNameFromString(entry.primarySubsystem.subsystem.name);
+      entryView.class = "primary-subsystem_" + subsystemClass;
+
       const radius = this.smallestRadius + iEntry * radiusIncrement;
+      entryView.radius = radius;
 
       for (let iEntryStage = 0; iEntryStage < entry.stages.length; iEntryStage++) {
         const entryStage = entry.stages[iEntryStage];
@@ -127,6 +131,22 @@ export class DiagramComponent {
     return y;
   }
 
+  createClassNameFromString(string: string) {
+    string = string.replace(/[^a-z0-9]/g, s => {
+      var c = s.charCodeAt(0);
+      if (c >= 65 && c <= 90) return s.toLowerCase();
+      return '-';
+    });
+    string = string.replace(/-+/g, s => { return '-'});
+    return string;
+  }
+
+
+
+
+
+
+  // TODO: Refactor out in favour of radialX and radialY
   edgeX(index: number, length: number) {
     const angle = this.lineAngle(index, length);
     const x = this.radius * Math.sin(angle * 2 * Math.PI);
