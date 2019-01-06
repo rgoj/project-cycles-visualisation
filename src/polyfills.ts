@@ -14,6 +14,9 @@
  * Learn more in https://angular.io/guide/browser-support
  */
 
+/** Stackblitz requires this one for Angular 7 */
+import 'core-js/es7/reflect';
+
 /***************************************************************************************************
  * BROWSER POLYFILLS
  */
