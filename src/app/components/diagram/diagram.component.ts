@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import * as _ from 'lodash';
+
 import { DataService } from '../../services/data.service';
 import { Entry, SubsystemCircle, EntryView } from 'src/app/interfaces/item';
 
@@ -62,6 +64,10 @@ export class DiagramComponent {
   }
 
   buildViewsFromEntries(entries: Entry[]): EntryView[] {
+    // entries = _.sortBy(entries, 'title'); // This does something at least!
+    entries = _.sortBy(entries, 'primarySubsystem.subsystem.name');
+    console.log(entries);
+
     const entryViews: EntryView[] = [];
 
     const radiusIncrement = (this.radius - this.smallestRadius) / (entries.length - 1)
