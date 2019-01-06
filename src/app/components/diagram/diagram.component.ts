@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import * as _ from 'lodash';
 
 import { DataService } from '../../services/data.service';
-import { Entry, SubsystemCircle, EntryView } from 'src/app/interfaces/item';
+import { Entry, SubsystemCircle, EntryView } from '../../interfaces/item';
 
 
 @Component({
