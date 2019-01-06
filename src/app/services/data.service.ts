@@ -48,13 +48,16 @@ export class DataService {
       indexFirstStage: indexFirstStage,
       indexLastStage: indexLastStage,
       numberOfStages: indexLastStage - indexFirstStage,
+      // numberOfStages: indexLastStage - indexFirstStage + 1,
 
       indexFirstSubsystem: indexFirstSubsystem,
       indexLastSubsystem: indexLastSubsystem,
       numberOfSubsystems: indexLastSubsystem - indexFirstSubsystem,
+      // numberOfStages: indexLastStage - indexFirstStage + 1,
 
       indexFirstEntry: 1,
     }
+    console.log('sheetConfig:', this.sheetConfig);
 
     for (let i = 0; i <= this.sheetConfig.numberOfStages; i++) {
       this.stages.push({
@@ -84,11 +87,21 @@ export class DataService {
       entry.subsystems = this.processEntrySubsystems(entryRow);
       entry.primarySubsystem = this.findPrimarySubsystem(entry.subsystems);
 
+      // TODO: Remember that I'm arbitrarily assigning a primary subsystem!!!
+      if(entry.primarySubsystem === undefined) {
+        entry.primarySubsystem = entry.subsystems[0];
+      }
+
       entry.stages = this.processEntryStages(entryRow);
 
-      console.log('Adding the following entry:');
-      console.log(entry);
-      this.entries.push(entry);
+      if (entry.text && entry.primarySubsystem) {
+        // console.log('Adding the following entry:');
+        // console.log(entry);
+        this.entries.push(entry);
+      } else {
+        console.log('Omitting the following entry:')
+        console.log(entry);
+      }
     }
 
   }
