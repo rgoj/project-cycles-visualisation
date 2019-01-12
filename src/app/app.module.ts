@@ -8,12 +8,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CacheInterceptor } from './services/cache.interceptor';
 import { DiagramComponent } from './components/diagram/diagram.component';
+import { ListComponent } from './components/list/list.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     DiagramComponent,
+    ListComponent,
   ],
   imports: [
     BrowserModule,
