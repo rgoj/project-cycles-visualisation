@@ -64,19 +64,17 @@ export class DataService {
 
       indexFirstStage: indexFirstStage,
       indexLastStage: indexLastStage,
-      numberOfStages: indexLastStage - indexFirstStage,
-      // numberOfStages: indexLastStage - indexFirstStage + 1,
+      numberOfStages: indexLastStage - indexFirstStage + 1,
 
       indexFirstSubsystem: indexFirstSubsystem,
       indexLastSubsystem: indexLastSubsystem,
-      numberOfSubsystems: indexLastSubsystem - indexFirstSubsystem,
-      // numberOfStages: indexLastStage - indexFirstStage + 1,
+      numberOfSubsystems: indexLastStage - indexFirstStage + 1,
 
       indexFirstEntry: 1,
     }
     console.log('sheetConfig:', this.sheetConfig);
 
-    for (let i = 0; i <= this.sheetConfig.numberOfStages; i++) {
+    for (let i = 0; i < this.sheetConfig.numberOfStages; i++) {
       this.stages.push({
         index: i,
         name: this.sheetConfig.headings[indexFirstStage + i],
@@ -84,7 +82,7 @@ export class DataService {
     }
     console.log(this.stages);
 
-    for (let i = 0; i <= this.sheetConfig.numberOfSubsystems; i++) {
+    for (let i = 0; i < this.sheetConfig.numberOfSubsystems; i++) {
       this.subsystems.push({
         index: i,
         name: this.sheetConfig.headings[indexFirstSubsystem + i],
@@ -160,7 +158,7 @@ export class DataService {
     let firstStageIndex: null|number = null;
     let lastStageIndex: null|number = null;
 
-    for (let i = 0; i <= this.sheetConfig.numberOfStages + 1; i++) {
+    for (let i = 0; i < this.sheetConfig.numberOfStages + 1; i++) {
       const columnIndex = this.sheetConfig.indexFirstStage + i;
       const state = entryRow[columnIndex];
 

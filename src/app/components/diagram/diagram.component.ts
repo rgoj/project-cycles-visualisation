@@ -89,18 +89,29 @@ export class DiagramComponent {
 
   buildViewsFromEntries(entries: Entry[]): EntryView[] {
     entries = _.sortBy(entries, 'primarySubsystem.subsystem.name');
+    entries = _.sortBy(entries, (entry) => {
+      return _.findIndex(this.diagramConfig.subsystems, (subsystem: any) => {
+        return subsystem.header == entry.primarySubsystem.subsystem.name
+      });
+    });
     console.log(entries);
 
     const entryViews: EntryView[] = [];
 
     const radiusIncrement = (this.radius - this.smallestRadius) / (entries.length - 1)
 
+    let currentSubsystem = null;
     for(let iEntry = 0; iEntry < entries.length; iEntry++) {
       const entry = entries[iEntry];
       const entryView = new EntryView(entry);
 
       const subsystemClass = this.createClassNameFromString(entry.primarySubsystem.subsystem.name);
       entryView.class = "primary-subsystem_" + subsystemClass;
+
+      if (currentSubsystem != subsystemClass) {
+        currentSubsystem = subsystemClass;
+        console.log(subsystemClass)
+      }
 
       const radius = this.smallestRadius + iEntry * radiusIncrement;
       entryView.radius = radius;

@@ -15,4 +15,19 @@ export const diagramConfig = {
     { header: 'Maintain', angularWidth: 1 / 12 },
     { header: 'Decline', angularWidth: 1 / 12 },
   ],
+
+  subsystems: [
+    { header: 'Project' },
+    { header: 'Service  / Profession' },
+    { header: 'Policy / Regulation' },
+    { header: 'Political' },
+    { header: 'Economic' },
+    { header: 'Technology' },
+    { header: 'Ecological' },
+    { header: 'Education' },
+    { header: 'Cultural' },
+    { header: 'Social' },
+    { header: 'Health / Wellbeing' },
+    { header: 'Individual / Home' },
+  ]
 };
