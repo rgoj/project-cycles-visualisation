@@ -59,15 +59,17 @@ export class DiagramComponent {
   calculateStageLine(stage) {
     // Sum up angular widths of all stages before this one to find the final angle
     let angle = 0;
+    let headerFound = false;
     for (let diagramStage of this.diagramConfig.stages) {
-      console.log(diagramStage, stage);
       if (diagramStage.header == stage.name) {
+        headerFound = true;
         break; // We've got the final angle!
       } else {
         angle += diagramStage.angularWidth;
       }
+    }
 
-      // Something has gone wrong if we've reached this point
+    if (!headerFound) {
       console.error(`Failed to assign an angle for stage "${stage.name}"`);
     }
 
