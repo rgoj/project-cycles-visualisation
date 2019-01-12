@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
+import { diagramConfig } from '../diagram.config';
 import { Entry, Subsystem, EntrySubsystem, EntryStage } from '../interfaces/item';
 import { GoogleSheetsService } from './google-sheets.service';
 
@@ -15,6 +16,7 @@ export class DataService {
   entryPreviewed = new BehaviorSubject<Entry>(null);
   entrySelected = new BehaviorSubject<Entry>(null);
 
+  diagramConfig = diagramConfig;
   sheetConfig;
 
   stages = [];
@@ -36,6 +38,10 @@ export class DataService {
 
   getData() {
     return this.data;
+  }
+
+  getConfig() {
+    return this.diagramConfig;
   }
 
   previewEntry(entry: Entry) {
@@ -73,7 +79,7 @@ export class DataService {
     for (let i = 0; i <= this.sheetConfig.numberOfStages; i++) {
       this.stages.push({
         index: i,
-        title: this.sheetConfig.headings[indexFirstStage + i],
+        name: this.sheetConfig.headings[indexFirstStage + i],
       });
     }
     console.log(this.stages);
@@ -81,7 +87,7 @@ export class DataService {
     for (let i = 0; i <= this.sheetConfig.numberOfSubsystems; i++) {
       this.subsystems.push({
         index: i,
-        title: this.sheetConfig.headings[indexFirstSubsystem + i],
+        name: this.sheetConfig.headings[indexFirstSubsystem + i],
       });
     }
     console.log(this.subsystems);
@@ -128,7 +134,7 @@ export class DataService {
       let status: string = null;
 
       subsystem.index = i;
-      subsystem.name = this.subsystems[i].title;
+      subsystem.name = this.subsystems[i].name;
 
       if (state == 'YES') {
         status = 'secondary';
@@ -177,8 +183,39 @@ export class DataService {
       }
     }
 
+    // for (let i = 0; i <= this.diagramConfig.stages.length; i++) {
+    //   const stageConfig = this.diagramConfig[i];
+    //   // const columnIndex = this.sheetConfig.headings.find((heading) => heading.title == stageConfig.header) + this.c;
+    //   const columnIndex = this.findColumnIndexForHeading()
+    //   const state = entryRow[columnIndex];
+
+    //   if (state === 'YES' && firstStageIndex === null) {
+    //     firstStageIndex = i;          
+    //   }
+
+    //   if (
+    //     state !== 'YES' && firstStageIndex !== null && lastStageIndex === null ||
+    //     state === 'YES' && columnIndex === lastStageIndex
+    //   ) {
+    //     lastStageIndex = i - 1;
+
+    //     entryStages.push(
+    //       new EntryStage(this.stages[firstStageIndex], this.stages[lastStageIndex])
+    //     );
+
+    //     firstStageIndex = null;
+    //     lastStageIndex = null;
+    //   }
+    // }
+
+
+
     return entryStages;
   }
+
+  // findColumnIndexForHeading(heading) {
+  //   return this.sheetConfig.headings.find((sheetHeading) => sheetHeading.title == heading) + this.c;
+  // }
 
   /*
    * Helper functions

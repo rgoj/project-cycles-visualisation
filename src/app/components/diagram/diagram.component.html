@@ -28,10 +28,6 @@
           [attr.x2]="line.edgeX"
           [attr.y2]="line.edgeY" />
 
-          <!-- Old -->
-          <!-- [attr.x2]="centreX + edgeX(i, stages.length)"
-          [attr.y2]="centreY - edgeY(i, stages.length)" -->
-
     <text class="stage__text"
           [attr.transform]="'translate(' +
                                line.edgeX + ', ' +
@@ -40,7 +36,7 @@
                              rotate(' + (270 - 360 * line.angle) + ')
                              translate(5, -5)
                             '">
-      {{line.stage.title}}
+      {{line.stage.name}}
     </text>
   </g>
 
@@ -58,7 +54,7 @@
           class="entry__arc"
           pointer-events="visibleStroke"
           [attr.d]="'M ' + arc.startX + ',' + arc.startY +
-                    'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 0 ' + arc.endX + ',' + arc.endY" />
+                    'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 1 ' + arc.endX + ',' + arc.endY" />
 
     <!-- <line [attr.x1]="entry.arcs[0].startX"
           [attr.y1]="entry.arcs[0].startY"

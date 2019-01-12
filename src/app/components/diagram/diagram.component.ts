@@ -12,6 +12,8 @@ import { Entry, SubsystemCircle, EntryView } from '../../interfaces/item';
   styleUrls: ['./diagram.component.scss']
 })
 export class DiagramComponent {
+  diagramConfig;
+
   scale = 1000;
 
   centreX = this.scale;
@@ -28,6 +30,8 @@ export class DiagramComponent {
   entryViews;
 
   constructor(private dataService: DataService) {
+    this.diagramConfig = this.dataService.diagramConfig;
+
     this.dataService.getData().subscribe((data) => {
       console.log('Subscribed to data service and received:')
       console.log(data);
@@ -53,11 +57,25 @@ export class DiagramComponent {
   }
 
   calculateStageLine(stage) {
+    // Sum up angular widths of all stages before this one to find the final angle
+    let angle = 0;
+    for (let diagramStage of this.diagramConfig.stages) {
+      console.log(diagramStage, stage);
+      if (diagramStage.header == stage.name) {
+        break; // We've got the final angle!
+      } else {
+        angle += diagramStage.angularWidth;
+      }
+
+      // Something has gone wrong if we've reached this point
+      console.error(`Failed to assign an angle for stage "${stage.name}"`);
+    }
+
     const stageLine = {
       stage: stage,
-      angle: this.lineAngle(stage.index, this.sheetConfig.numberOfStages),
-      edgeX: this.centreX + this.edgeX(stage.index, this.sheetConfig.numberOfStages),
-      edgeY: this.centreY + this.edgeY(stage.index, this.sheetConfig.numberOfStages)
+      angle: angle,
+      edgeX: this.radialX(angle, this.radius),
+      edgeY: this.radialY(angle, this.radius)
     }
 
     return stageLine;
@@ -68,7 +86,6 @@ export class DiagramComponent {
   }
 
   buildViewsFromEntries(entries: Entry[]): EntryView[] {
-    // entries = _.sortBy(entries, 'title'); // This does something at least!
     entries = _.sortBy(entries, 'primarySubsystem.subsystem.name');
     console.log(entries);
 
@@ -89,8 +106,12 @@ export class DiagramComponent {
       for (let iEntryStage = 0; iEntryStage < entry.stages.length; iEntryStage++) {
         const entryStage = entry.stages[iEntryStage];
         const startAngle = this.findStageAngle(entryStage.startStage);
-        // TODO: Remove the hardcoded value and replace with angular width of endStage!!!
-        const endAngle = this.findStageAngle(entryStage.endStage) + (1 / 14);
+        const endStage = entryStage.endStage;
+        const endStageConfig = this.diagramConfig.stages.find((header) => header.header == endStage.name);
+        const endAngle = this.findStageAngle(endStage) + endStageConfig.angularWidth;
+
+        // Check whether we're crossing the first stage... (angle = 0)
+        const crossingToggle = endAngle < startAngle ? 1 : 0;
 
         const arc = {
           radius: radius,
@@ -100,7 +121,7 @@ export class DiagramComponent {
           startY: this.radialY(startAngle, radius),
           endX: this.radialX(endAngle, radius),
           endY: this.radialY(endAngle, radius),
-          largeArcFlag: (entryStage.endStage.index - entryStage.startStage.index) / this.sheetConfig.numberOfStages > 0.5 ? 1 : 0,
+          largeArcFlag: Math.abs(crossingToggle + endAngle - startAngle) > 0.5 ? 1 : 0,
         }
 
         entryView.arcs.push(arc);
@@ -130,7 +151,7 @@ export class DiagramComponent {
   }
 
   radialX(angle, radius, fromCentre=true) {
-    let x = radius * Math.sin(angle * 2 * Math.PI);
+    let x = - radius * Math.sin(angle * 2 * Math.PI);
     if (fromCentre) { x += this.centreX; }
     return x;
   }
@@ -155,19 +176,6 @@ export class DiagramComponent {
 
 
 
-
-  // TODO: Refactor out in favour of radialX and radialY
-  edgeX(index: number, length: number) {
-    const angle = this.lineAngle(index, length);
-    const x = this.radius * Math.sin(angle * 2 * Math.PI);
-    return x;
-  }
-
-  edgeY(index: number, length: number) {
-    const angle = this.lineAngle(index, length);
-    const y = this.radius * Math.cos(angle * 2 * Math.PI);
-    return y;
-  }
 
 
 
