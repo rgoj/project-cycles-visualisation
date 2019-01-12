@@ -12,6 +12,9 @@ export class DataService {
   rawData: any;
   data = new BehaviorSubject<any>(null);
 
+  entryPreviewed = new BehaviorSubject<Entry>(null);
+  entrySelected = new BehaviorSubject<Entry>(null);
+
   sheetConfig;
 
   stages = [];
@@ -33,6 +36,14 @@ export class DataService {
 
   getData() {
     return this.data;
+  }
+
+  previewEntry(entry: Entry) {
+    this.entryPreviewed.next(entry);
+  }
+
+  selectEntry(entry: Entry) {
+    this.entrySelected.next(entry);
   }
 
   processData() {

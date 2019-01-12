@@ -48,6 +48,10 @@ export class DiagramComponent {
     });
   }
 
+  hover(entryView) {
+    this.dataService.previewEntry(entryView.entry);
+  }
+
   calculateStageLine(stage) {
     const stageLine = {
       stage: stage,

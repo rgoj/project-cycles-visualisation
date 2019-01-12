@@ -28,6 +28,7 @@
           [attr.x2]="line.edgeX"
           [attr.y2]="line.edgeY" />
 
+          <!-- Old -->
           <!-- [attr.x2]="centreX + edgeX(i, stages.length)"
           [attr.y2]="centreY - edgeY(i, stages.length)" -->
 
@@ -43,7 +44,9 @@
     </text>
   </g>
 
-  <g *ngFor="let entry of entryViews; index as i" [attr.class]="'entry ' + entry.class">
+  <g *ngFor="let entry of entryViews; index as i" 
+     [attr.class]="'entry ' + entry.class"
+     (mouseover)="hover(entry)">
     <circle [attr.cx]="centreX"
             [attr.cy]="centreY"
             [attr.r]="entry.radius"/>
@@ -53,6 +56,7 @@
 
     <path *ngFor="let arc of entry.arcs"
           class="entry__arc"
+          pointer-events="visibleStroke"
           [attr.d]="'M ' + arc.startX + ',' + arc.startY +
                     'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 0 ' + arc.endX + ',' + arc.endY" />
 
