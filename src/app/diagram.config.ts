@@ -1,4 +1,20 @@
 export const diagramConfig = {
+  reverseSubsystemSortDirection: true,
+  subsystems: [
+    { header: 'Project' }, // in the centre if `reverseSubsystemSortDirection` is false
+    { header: 'Service  / Profession' },
+    { header: 'Policy / Regulation' },
+    { header: 'Political' },
+    { header: 'Economic' },
+    { header: 'Technology' },
+    { header: 'Ecological' },
+    { header: 'Education' },
+    { header: 'Cultural' },
+    { header: 'Social' },
+    { header: 'Health / Wellbeing' },
+    { header: 'Individual / Home' }, // in the centre if `reverseSubsystemSortDirection` is true
+  ],
+
   stages: [
     { header: 'Idea', angularWidth: 1 / 16 },
     { header: 'Team-find', angularWidth: 1 / 16 },
@@ -15,19 +31,4 @@ export const diagramConfig = {
     { header: 'Maintain', angularWidth: 1 / 12 },
     { header: 'Decline', angularWidth: 1 / 12 },
   ],
-
-  subsystems: [
-    { header: 'Project' },
-    { header: 'Service  / Profession' },
-    { header: 'Policy / Regulation' },
-    { header: 'Political' },
-    { header: 'Economic' },
-    { header: 'Technology' },
-    { header: 'Ecological' },
-    { header: 'Education' },
-    { header: 'Cultural' },
-    { header: 'Social' },
-    { header: 'Health / Wellbeing' },
-    { header: 'Individual / Home' },
-  ]
 };

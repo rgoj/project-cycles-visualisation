@@ -83,9 +83,10 @@ export class DiagramComponent {
   }
 
   buildViewsFromEntries(entries: Entry[]): EntryView[] {
-    entries = _.sortBy(entries, 'primarySubsystem.subsystem.name');
+    // entries = _.sortBy(entries, 'primarySubsystem.subsystem.name'); // Alphabetical
+    const direction = this.diagramConfig.reverseSubsystemSortDirection ? -1 : 1;
     entries = _.sortBy(entries, (entry) => {
-      return _.findIndex(this.diagramConfig.subsystems, (subsystem: any) => {
+      return direction * _.findIndex(this.diagramConfig.subsystems, (subsystem: any) => {
         return subsystem.header == entry.primarySubsystem.subsystem.name
       });
     });
