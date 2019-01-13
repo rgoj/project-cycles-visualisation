@@ -53,11 +53,11 @@ export class DataService {
   }
 
   processData() {
-    const indexFirstStage = this.convertColumn('L');
-    const indexLastStage = this.convertColumn('Y');
+    const indexFirstStage = this.convertColumn('M');
+    const indexLastStage = this.convertColumn('Z');
 
-    const indexFirstSubsystem = this.convertColumn('Z');
-    const indexLastSubsystem = this.convertColumn('AK');
+    const indexFirstSubsystem = this.convertColumn('AA');
+    const indexLastSubsystem = this.convertColumn('AL');
 
     this.sheetConfig = {
       headings: this.rawData.values[0],
@@ -72,7 +72,13 @@ export class DataService {
 
       indexFirstEntry: 1,
     }
+    console.log('\n');
     console.log('sheetConfig:', this.sheetConfig);
+    console.log('First stage: ', this.sheetConfig.headings[indexFirstStage]);
+    console.log('Last stage: ', this.sheetConfig.headings[indexLastStage]);
+    console.log('First subsystem: ', this.sheetConfig.headings[indexFirstSubsystem]);
+    console.log('Last subsystem: ', this.sheetConfig.headings[indexLastSubsystem]);
+    console.log('\n');
 
     for (let i = 0; i < this.sheetConfig.numberOfStages; i++) {
       this.stages.push({
@@ -80,7 +86,9 @@ export class DataService {
         name: this.sheetConfig.headings[indexFirstStage + i],
       });
     }
+    console.log('The following stages have been identified:')
     console.log(this.stages);
+    console.log('\n');
 
     for (let i = 0; i < this.sheetConfig.numberOfSubsystems; i++) {
       this.subsystems.push({
@@ -88,37 +96,55 @@ export class DataService {
         name: this.sheetConfig.headings[indexFirstSubsystem + i],
       });
     }
+    console.log('The following subsystems have been identified:')
     console.log(this.subsystems);
+    console.log('\n');
 
 
+    console.log('Processing data for individual entries now...');
     // for (let i = this.sheetConfig.indexFirstEntry; i < this.sheetConfig.indexFirstEntry + 1; i++) {
     for (let i = this.sheetConfig.indexFirstEntry; i < this.rawData.values.length; i++) {
-      console.log('Processing row ' + i);
       const entryRow = this.rawData.values[i];
       const entry = new Entry();
+
+      const omitMessage = `Omitting the following entry (spreadsheet row ${i + 1}) because `;
 
       entry.text = entryRow[1];
 
       entry.subsystems = this.processEntrySubsystems(entryRow);
       entry.primarySubsystem = this.findPrimarySubsystem(entry.subsystems);
 
-      // TODO: Remember that I'm arbitrarily assigning a primary subsystem!!!
-      if(entry.primarySubsystem === undefined) {
-        entry.primarySubsystem = entry.subsystems[0];
+
+      if (entry.subsystems.length === 0) {
+        console.log(omitMessage + 'it does not have any subsystems defined:');
+        console.log(entry.text)
+        console.log('\n');
+        continue;
+      }
+
+      if (entry.primarySubsystem === undefined) {
+        console.log(omitMessage + 'neither of its subsystems is declared primary:');
+        console.log(entry.text)
+        console.log('\n');
+        continue;
+
+        // Another option would be to select any of the subsystems as primary...
+        // entry.primarySubsystem = entry.subsystems[0];
       }
 
       entry.stages = this.processEntryStages(entryRow);
 
       if (entry.text && entry.primarySubsystem) {
-        // console.log('Adding the following entry:');
-        // console.log(entry);
         this.entries.push(entry);
       } else {
-        console.log('Omitting the following entry:')
-        console.log(entry);
+        // We should never get here
+        console.error(omitMessage + 'for unknown reasons - is there an unknown problem?');
+        console.log(entry.text)
+        console.log('\n');
       }
     }
-
+    console.log('The following entries have been identified:')
+    console.log(this.entries);
   }
 
   processEntrySubsystems(entryRow: []): EntrySubsystem[] {

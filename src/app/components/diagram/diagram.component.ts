@@ -33,12 +33,7 @@ export class DiagramComponent {
     this.diagramConfig = this.dataService.diagramConfig;
 
     this.dataService.getData().subscribe((data) => {
-      console.log('Subscribed to data service and received:')
-      console.log(data);
-
       if(data) {
-        console.log('...which looks like real data, initialising diagram!');
-
         this.sheetConfig = data.sheetConfig;
 
         this.circleRadialDistance = this.radius / (data.subsystems.length + 1);
@@ -101,6 +96,7 @@ export class DiagramComponent {
     const radiusIncrement = (this.radius - this.smallestRadius) / (entries.length - 1)
 
     let currentSubsystem = null;
+    const subsystemsRepresented = [];
     for(let iEntry = 0; iEntry < entries.length; iEntry++) {
       const entry = entries[iEntry];
       const entryView = new EntryView(entry);
@@ -110,7 +106,7 @@ export class DiagramComponent {
 
       if (currentSubsystem != subsystemClass) {
         currentSubsystem = subsystemClass;
-        console.log(subsystemClass)
+        subsystemsRepresented.push(currentSubsystem);
       }
 
       const radius = this.smallestRadius + iEntry * radiusIncrement;
@@ -142,6 +138,10 @@ export class DiagramComponent {
 
       entryViews.push(entryView);
     }
+
+    console.log(`The following ${subsystemsRepresented.length} subsystems are represented in the current diagram (showing their auto-generated class names):`)
+    console.log(subsystemsRepresented);
+    console.log('\n');
 
     return entryViews;
   }
