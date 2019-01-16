@@ -180,7 +180,6 @@ export class DataService {
     }
 
     if (entry.text && entry.primarySubsystem) {
-      this.entries.push(entry);
       continueProcessing = true;
     } else {
       // We should never get here
