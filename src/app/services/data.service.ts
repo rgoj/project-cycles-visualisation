@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { diagramConfig } from '../diagram.config';
-import { Entry, Subsystem, EntrySubsystem, EntryStage } from '../interfaces/item';
+import { Entry, Subsystem, EntrySubsystem, EntryStage, Pivot } from '../interfaces/item';
 import { GoogleSheetsService } from './google-sheets.service';
 
 @Injectable({
@@ -22,6 +22,7 @@ export class DataService {
   stages = [];
   subsystems = [];
   entries: Entry[] = [];
+  pivots = new Map<string, Entry[]>();
 
   constructor(private googleSheets: GoogleSheetsService) {
     this.googleSheets.getData().subscribe((data) => {
@@ -31,7 +32,8 @@ export class DataService {
         sheetConfig: this.sheetConfig,
         stages: this.stages,
         subsystems: this.subsystems,
-        entries: this.entries
+        entries: this.entries,
+        pivots: this.pivots
       })
     });
   }
@@ -59,6 +61,9 @@ export class DataService {
     const indexFirstSubsystem = this.convertColumn('AA');
     const indexLastSubsystem = this.convertColumn('AL');
 
+    const indexFirstPivot = this.convertColumn('AM');
+    const indexLastPivot = this.convertColumn('AP');
+
     this.sheetConfig = {
       headings: this.rawData.values[0],
 
@@ -69,6 +74,10 @@ export class DataService {
       indexFirstSubsystem: indexFirstSubsystem,
       indexLastSubsystem: indexLastSubsystem,
       numberOfSubsystems: indexLastStage - indexFirstStage + 1,
+
+      indexFirstPivot: indexFirstPivot,
+      indexLastPivot: indexLastPivot,
+      numberOfPivots: indexLastPivot - indexFirstPivot + 1,
 
       indexFirstEntry: 1,
     }
@@ -106,6 +115,7 @@ export class DataService {
     for (let i = this.sheetConfig.indexFirstEntry; i < this.rawData.values.length; i++) {
       const entryRow = this.rawData.values[i];
       const entry = new Entry();
+      let pivots: string[] = [];
 
       entry.text = entryRow[1];
 
@@ -115,8 +125,20 @@ export class DataService {
 
       entry.stages = this.processEntryStages(entryRow);
 
+      pivots = this.processEntryPivots(entryRow)
+
       if (continueProcessing) {
         this.entries.push(entry);
+
+        for (const pivot of pivots) {
+          if (this.pivots.has(pivot)) {
+            this.pivots.get(pivot).push(entry);
+            // pivotEntries.push(entry);
+            // this.pivots.set()
+          } else {
+            this.pivots.set(pivot, [entry])
+          }
+        }
       } else {
         // We should never get here
         console.error('An unexpected problem occured when processing entry:', entry, '\n');
@@ -124,6 +146,13 @@ export class DataService {
     }
     console.log('The following entries have been identified:')
     console.log(this.entries);
+
+    // Testing that the pivots contain the same objects as the entries! :)
+    this.pivots.get('Current')[0].text = 'Kowabonga!';
+    console.log(this.pivots.get('Current')[0]);
+
+    console.log('The following pivots have been identified:')
+    console.log(this.pivots);
   }
 
 
@@ -224,6 +253,30 @@ export class DataService {
     return entryStages;
   }
 
+  processEntryPivots(entryRow): string[] {
+    const pivots: string[] = [];
+
+    for (let i = 0; i < this.sheetConfig.numberOfPivots; i++) {
+      const columnIndex = this.sheetConfig.indexFirstPivot + i;
+      const pivotName = this.sheetConfig.headings[columnIndex];
+      const state = entryRow[columnIndex];
+
+      if (state == 'YES') {
+        pivots.push(pivotName);
+      } else if (state == null) {
+        continue;
+      } else {
+        console.error(
+          'Unknown problem when processing pivot named: ',
+          pivotName,
+          ' for entry: ',
+          entryRow[0]
+        );
+      }
+    }
+    
+    return pivots;
+  }
 
   /*
    * Helper functions
