@@ -72,6 +72,7 @@ export class DataService {
 
       indexFirstEntry: 1,
     }
+
     console.log('\n');
     console.log('sheetConfig:', this.sheetConfig);
     console.log('First stage: ', this.sheetConfig.headings[indexFirstStage]);
@@ -100,52 +101,31 @@ export class DataService {
     console.log(this.subsystems);
     console.log('\n');
 
-
     console.log('Processing data for individual entries now...');
     // for (let i = this.sheetConfig.indexFirstEntry; i < this.sheetConfig.indexFirstEntry + 1; i++) {
     for (let i = this.sheetConfig.indexFirstEntry; i < this.rawData.values.length; i++) {
       const entryRow = this.rawData.values[i];
       const entry = new Entry();
 
-      const omitMessage = `Omitting the following entry (spreadsheet row ${i + 1}) because `;
-
       entry.text = entryRow[1];
 
       entry.subsystems = this.processEntrySubsystems(entryRow);
       entry.primarySubsystem = this.findPrimarySubsystem(entry.subsystems);
-
-
-      if (entry.subsystems.length === 0) {
-        console.log(omitMessage + 'it does not have any subsystems defined:');
-        console.log(entry.text)
-        console.log('\n');
-        continue;
-      }
-
-      if (entry.primarySubsystem === undefined) {
-        console.log(omitMessage + 'neither of its subsystems is declared primary:');
-        console.log(entry.text)
-        console.log('\n');
-        continue;
-
-        // Another option would be to select any of the subsystems as primary...
-        // entry.primarySubsystem = entry.subsystems[0];
-      }
+      const continueProcessing = this.checkEntry(i, entry);
 
       entry.stages = this.processEntryStages(entryRow);
 
-      if (entry.text && entry.primarySubsystem) {
+      if (continueProcessing) {
         this.entries.push(entry);
       } else {
         // We should never get here
-        console.error(omitMessage + 'for unknown reasons - is there an unknown problem?');
-        console.log(entry.text)
-        console.log('\n');
+        console.error('An unexpected problem occured when processing entry:', entry, '\n');
       }
     }
     console.log('The following entries have been identified:')
     console.log(this.entries);
   }
+
 
   processEntrySubsystems(entryRow: []): EntrySubsystem[] {
     const subsystems = [];
@@ -178,6 +158,41 @@ export class DataService {
     return subsystems.find(x => x.status === 'primary');
   }
 
+  checkEntry(i: number, entry: Entry): boolean {
+    let continueProcessing;
+    const omitMessage = `Omitting the following entry (spreadsheet row ${i + 1}) because `;
+
+    if (entry.subsystems.length === 0) {
+      console.log(omitMessage + 'it does not have any subsystems defined:');
+      console.log(entry.text)
+      console.log('\n');
+      continueProcessing = false;
+    }
+
+    if (entry.primarySubsystem === undefined) {
+      console.log(omitMessage + 'neither of its subsystems is declared primary:');
+      console.log(entry.text)
+      console.log('\n');
+      continueProcessing = false;
+
+      // Another option would be to select any of the subsystems as primary...
+      // entry.primarySubsystem = entry.subsystems[0];
+    }
+
+    if (entry.text && entry.primarySubsystem) {
+      this.entries.push(entry);
+      continueProcessing = true;
+    } else {
+      // We should never get here
+      console.error(omitMessage + 'for unknown reasons - is there an unknown problem?');
+      console.log(entry.text)
+      console.log('\n');
+      continueProcessing = false;
+    }
+
+    return continueProcessing;
+  }
+
   processEntryStages(entryRow: []): EntryStage[] {
     const entryStages: EntryStage[] = [];
 
@@ -207,39 +222,9 @@ export class DataService {
       }
     }
 
-    // for (let i = 0; i <= this.diagramConfig.stages.length; i++) {
-    //   const stageConfig = this.diagramConfig[i];
-    //   // const columnIndex = this.sheetConfig.headings.find((heading) => heading.title == stageConfig.header) + this.c;
-    //   const columnIndex = this.findColumnIndexForHeading()
-    //   const state = entryRow[columnIndex];
-
-    //   if (state === 'YES' && firstStageIndex === null) {
-    //     firstStageIndex = i;          
-    //   }
-
-    //   if (
-    //     state !== 'YES' && firstStageIndex !== null && lastStageIndex === null ||
-    //     state === 'YES' && columnIndex === lastStageIndex
-    //   ) {
-    //     lastStageIndex = i - 1;
-
-    //     entryStages.push(
-    //       new EntryStage(this.stages[firstStageIndex], this.stages[lastStageIndex])
-    //     );
-
-    //     firstStageIndex = null;
-    //     lastStageIndex = null;
-    //   }
-    // }
-
-
-
     return entryStages;
   }
 
-  // findColumnIndexForHeading(heading) {
-  //   return this.sheetConfig.headings.find((sheetHeading) => sheetHeading.title == heading) + this.c;
-  // }
 
   /*
    * Helper functions
