@@ -1,4 +1,11 @@
 export const diagramConfig = {
+  // pivot: false,
+  pivot: 'Current',
+  // pivot: 'Potential Disruption',
+  // pivot: 'Disruption',
+  // pivot: 'Outside UK',
+
+
   reverseSubsystemSortDirection: true,
   subsystems: [
     { header: 'Project' }, // in the centre if `reverseSubsystemSortDirection` is false

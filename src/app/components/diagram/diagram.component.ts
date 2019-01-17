@@ -105,7 +105,7 @@ export class DiagramComponent {
       const entryView = new EntryView(entry);
 
       const subsystemClass = this.createClassNameFromString(entry.primarySubsystem.subsystem.name);
-      entryView.class = "primary-subsystem_" + subsystemClass;
+      entryView.addClass("primary-subsystem_" + subsystemClass);
 
       if (currentSubsystem != subsystemClass) {
         currentSubsystem = subsystemClass;
@@ -142,7 +142,7 @@ export class DiagramComponent {
       entryViews.push(entryView);
     }
 
-    const pivot = 'Outside UK';
+    const pivot = this.diagramConfig.pivot;
     if (pivot) {
       for (const entryView of entryViews) {
         entryView.addClass('fade');
