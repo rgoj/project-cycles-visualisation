@@ -44,6 +44,11 @@ export class Entry {
   }
 }
 
+export class Pivot {
+  name: string;
+  entries: Entry[];
+}
+
 export class EntrySubsystem {
   subsystem: Subsystem;
   status: string;
@@ -67,6 +72,8 @@ export class EntryStage {
 export class EntryView {
   entry: Entry;
   arcs: any;
+
+  private classes: Set<string>;
   class: string;
 
   radius: number;
@@ -75,8 +82,35 @@ export class EntryView {
     this.entry = entry;
     this.arcs = [];
     this.class = '';
+    this.classes = new Set<string>([]);
     this.radius = null;
   }
+
+  addClass(className: string) {
+    this.classes.add(className);
+    this.class = this.stringifyClass();
+  }
+
+  deleteClass(className: string) {
+    this.classes.delete(className);
+    this.class = this.stringifyClass();
+  }
+  
+  private stringifyClass() {
+    let classString = '';
+
+    for (const className of Array.from(this.classes)) {
+      classString += className + ' ';
+    } 
+
+    return classString;
+  }
+}
+
+export class PivotView {
+  name: string;
+  pivot: Pivot;
+  entries: EntryView[];
 }
 
 export interface EntryArc {

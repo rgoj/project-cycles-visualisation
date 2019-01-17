@@ -28,6 +28,7 @@ export class DiagramComponent {
   stageLines;
   subsystemCircles;
   entryViews;
+  pivots;
 
   constructor(private dataService: DataService) {
     this.diagramConfig = this.dataService.diagramConfig;
@@ -38,6 +39,7 @@ export class DiagramComponent {
 
         this.circleRadialDistance = this.radius / (data.subsystems.length + 1);
 
+        this.pivots = data.pivots;
         this.stageLines = data.stages.map(stage => this.calculateStageLine(stage));
         this.subsystemCircles = data.subsystems.map(
           subsystem => this.calculateSubsystemCircle(subsystem)
@@ -138,6 +140,18 @@ export class DiagramComponent {
       }
 
       entryViews.push(entryView);
+    }
+
+    const pivot = 'Outside UK';
+    if (pivot) {
+      for (const entryView of entryViews) {
+        entryView.addClass('fade');
+      }
+
+      for (const entry of this.pivots.get(pivot)) {
+        const entryView = entryViews.find((entryView) => entryView.entry == entry);
+        entryView.deleteClass('fade');
+      }
     }
 
     console.log(`The following ${subsystemsRepresented.length} subsystems are represented in the current diagram (showing their auto-generated class names):`)
