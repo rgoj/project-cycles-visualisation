@@ -142,29 +142,7 @@ export class DiagramComponent {
       const radius = this.smallestRadius + iEntry * radiusIncrement;
       entryView.radius = radius;
 
-      for (let iEntryStage = 0; iEntryStage < entry.stages.length; iEntryStage++) {
-        const entryStage = entry.stages[iEntryStage];
-        const startAngle = this.findStageAngle(entryStage.startStage);
-        const endStage = entryStage.endStage;
-        const endStageConfig = this.diagramConfig.stages.find((header) => header.header == endStage.name);
-        const endAngle = this.findStageAngle(endStage) + endStageConfig.angularWidth;
-
-        // Check whether we're crossing the first stage... (angle = 0)
-        const crossingToggle = endAngle < startAngle ? 1 : 0;
-
-        const arc = {
-          radius: radius,
-          startAngle: startAngle,
-          endAngle: endAngle,
-          startX: this.radialX(startAngle, radius),
-          startY: this.radialY(startAngle, radius),
-          endX: this.radialX(endAngle, radius),
-          endY: this.radialY(endAngle, radius),
-          largeArcFlag: Math.abs(crossingToggle + endAngle - startAngle) > 0.5 ? 1 : 0,
-        }
-
-        entryView.arcs.push(arc);
-      }
+      entryView.arcs = this.buildArcsWithRadius(entry, radius);
 
       entryViews.push(entryView);
     }
@@ -174,6 +152,36 @@ export class DiagramComponent {
     console.log('\n');
 
     return entryViews;
+  }
+
+  private buildArcsWithRadius(entry: Entry, radius: number) {
+    const arcs = [];
+
+    for (let iEntryStage = 0; iEntryStage < entry.stages.length; iEntryStage++) {
+      const entryStage = entry.stages[iEntryStage];
+      const startAngle = this.findStageAngle(entryStage.startStage);
+      const endStage = entryStage.endStage;
+      const endStageConfig = this.diagramConfig.stages.find((header) => header.header == endStage.name);
+      const endAngle = this.findStageAngle(endStage) + endStageConfig.angularWidth;
+
+      // Check whether we're crossing the first stage... (angle = 0)
+      const crossingToggle = endAngle < startAngle ? 1 : 0;
+
+      const arc = {
+        radius: radius,
+        startAngle: startAngle,
+        endAngle: endAngle,
+        startX: this.radialX(startAngle, radius),
+        startY: this.radialY(startAngle, radius),
+        endX: this.radialX(endAngle, radius),
+        endY: this.radialY(endAngle, radius),
+        largeArcFlag: Math.abs(crossingToggle + endAngle - startAngle) > 0.5 ? 1 : 0,
+      }
+
+      arcs.push(arc);
+    }
+
+    return arcs;
   }
 
 
