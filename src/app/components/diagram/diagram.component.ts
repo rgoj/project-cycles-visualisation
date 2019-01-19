@@ -16,10 +16,10 @@ export class DiagramComponent {
 
   scale = 1000;
 
-  centreX = this.scale / 2;
+  centreX = this.scale / 2 + 50;
   centreY = this.scale / 2;
 
-  radius = 490;
+  radius = 450;
   smallestRadius = 20; 
   circleRadialDistance;
 
