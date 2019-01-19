@@ -8,7 +8,9 @@
 
 
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let pivot of data.pivots">
+    <mat-expansion-panel *ngFor="let pivot of data.pivots"
+                         (opened)="setPivot(pivot.name)"
+                         (closed)="closePivot(pivot.name)">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{pivot.name}}
@@ -88,6 +90,7 @@
   
   </mat-accordion>
 
+  {{ currentPivot }}
 
 
 

@@ -12,6 +12,7 @@ export class ListComponent implements OnInit {
   data: any;
 
   pivots: any;
+  currentPivot: string;
 
   entryPreviewed: Entry;
   entrySelected: Entry;
@@ -35,5 +36,13 @@ export class ListComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  setPivot(pivotName) {
+    this.currentPivot = pivotName;
+  }
+
+  closePivot(pivotName) {
+    if(this.currentPivot === pivotName) this.currentPivot = null;
   }
 }
