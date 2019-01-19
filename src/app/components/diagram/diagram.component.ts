@@ -63,6 +63,9 @@ export class DiagramComponent {
       });
     });
 
+    // this.entryViewPreviewed = this.entryViews[20];
+    // console.log('Previewing entry: ', this.entryViewPreviewed);
+
     this.dataService.getPivotSelected().subscribe((pivotName) => {
       this.changePivot(pivotName);
     });
@@ -159,6 +162,8 @@ export class DiagramComponent {
 
       entryView.arcs = this.buildArcsWithRadius(entry, radius);
 
+      entryView.firstStageLine = this.buildFirstStageLine(entryView, radius);
+
       entryViews.push(entryView);
     }
 
@@ -181,8 +186,6 @@ export class DiagramComponent {
         this.subsystemViews.push(new SubsystemView(subsystem, radiusStart, radiusEnd));
       }
     }
-
-
 
     // Add arcs for secondary subsystems
     for(let iEntry = 0; iEntry < entries.length; iEntry++) {
@@ -238,6 +241,24 @@ export class DiagramComponent {
     }
 
     return arcs;
+  }
+
+  private buildFirstStageLine(entryView, radius: number) {
+    let angle = 1;
+    entryView.arcs.forEach(arc => {
+      if (arc.startAngle < angle) angle = arc.startAngle;
+      if (arc.endAngle < arc.startAngle) angle = 0; // arc crossing angle 0...
+    });
+
+    const radiusStart = this.radius + 20;
+    const radiusEnd = radius - 7.5;
+
+    return {
+      startX: this.radialX(angle, radiusStart),
+      startY: this.radialY(angle, radiusStart),
+      endX: this.radialX(angle, radiusEnd),
+      endY: this.radialY(angle, radiusEnd),
+    }
   }
 
 

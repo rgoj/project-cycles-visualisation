@@ -98,6 +98,14 @@
   <g *ngIf="entryViewPreviewed">
     <text>{{entrySelected}}</text>
 
+    <g [attr.class]="'entry entry_preview ' + entryViewPreviewed.class">
+      <path *ngFor="let arc of entryViewPreviewed.arcs"
+            class="entry__arc"
+            pointer-events="none"
+            [attr.d]="'M ' + arc.startX + ',' + arc.startY +
+                      'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 1 ' + arc.endX + ',' + arc.endY" />
+    </g>
+
     <g *ngFor="let subsystem of entryViewPreviewed.secondaryArcs | keyvalue"
        [attr.class]="'entry subsystem_' + subsystem.key + ' entry_preview entry_secondary'">
 
@@ -107,6 +115,13 @@
             [attr.d]="'M ' + arc.startX + ',' + arc.startY +
                       'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 1 ' + arc.endX + ',' + arc.endY" />
     </g>
+
+    <line class=""
+          [attr.class]="'entry entry__first-stage-line ' + entryViewPreviewed.class"
+          [attr.x1]="entryViewPreviewed.firstStageLine.startX"
+          [attr.y1]="entryViewPreviewed.firstStageLine.startY"
+          [attr.x2]="entryViewPreviewed.firstStageLine.endX"
+          [attr.y2]="entryViewPreviewed.firstStageLine.endY" />
   </g>
 
 

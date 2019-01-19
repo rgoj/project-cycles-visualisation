@@ -129,6 +129,7 @@ export class DataService {
 
     console.log('Processing data for individual entries now...');
     // for (let i = this.sheetConfig.indexFirstEntry; i < this.sheetConfig.indexFirstEntry + 1; i++) {
+    // for (let i = 91; i < 92; i++) {
     for (let i = this.sheetConfig.indexFirstEntry; i < this.rawData.values.length; i++) {
       const entryRow = this.rawData.values[i];
       const entry = new Entry();
@@ -237,7 +238,7 @@ export class DataService {
     let firstStageIndex: null|number = null;
     let lastStageIndex: null|number = null;
 
-    for (let i = 0; i < this.sheetConfig.numberOfStages + 1; i++) {
+    for (let i = 0; i < this.sheetConfig.numberOfStages; i++) {
       const columnIndex = this.sheetConfig.indexFirstStage + i;
       const state = entryRow[columnIndex];
 
@@ -245,10 +246,7 @@ export class DataService {
         firstStageIndex = i;          
       }
 
-      if (
-        state !== 'YES' && firstStageIndex !== null && lastStageIndex === null ||
-        state === 'YES' && columnIndex === lastStageIndex
-      ) {
+      if (state !== 'YES' && firstStageIndex !== null) {
         lastStageIndex = i - 1;
 
         entryStages.push(
@@ -258,6 +256,11 @@ export class DataService {
         firstStageIndex = null;
         lastStageIndex = null;
       }
+    }
+
+    if(firstStageIndex != null) {
+      lastStageIndex = this.sheetConfig.numberOfStages - 1;
+      entryStages.push(new EntryStage(this.stages[firstStageIndex], this.stages[lastStageIndex]));
     }
 
     return entryStages;

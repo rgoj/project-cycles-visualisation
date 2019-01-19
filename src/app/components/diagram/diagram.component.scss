@@ -86,7 +86,7 @@ $animation-duration-ultra-short: 50ms;
   }
 
   &.entry_fade-partial {
-    opacity: 0.4;
+    opacity: 0.25;
     transition: opacity $animation-duration-short ease-out;
   }
 
@@ -110,7 +110,14 @@ $animation-duration-ultra-short: 50ms;
     }
 
     &.entry_secondary .entry__arc {
-      stroke-width: 13;
+      stroke-width: 10;
+      opacity: 1;
     }
+
+  }
+
+  &.entry__first-stage-line {
+    stroke-width: 5;
+    stroke-linecap: round;
   }
 }
