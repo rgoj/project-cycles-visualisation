@@ -18,6 +18,21 @@ export class Subsystem {
   }
 }
 
+export class SubsystemView {
+  subsystem: Subsystem;
+
+  radiusStart: number;
+  radiusEnd: number;
+  radiusMiddle: number;
+
+  constructor(subsystem: Subsystem, start: number, end: number, middle:number) {
+    this.subsystem = subsystem;
+    this.radiusStart = start;
+    this.radiusEnd = end;
+    this.radiusMiddle = middle;
+  }
+}
+
 export class SubsystemCircle {
   subsystem: Subsystem;
   radius: number;

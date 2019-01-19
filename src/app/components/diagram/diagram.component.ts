@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import * as _ from 'lodash';
 
 import { DataService } from '../../services/data.service';
-import { Entry, SubsystemCircle, EntryView } from '../../interfaces/item';
+import { Entry, SubsystemView, SubsystemCircle, EntryView } from '../../interfaces/item';
 
 
 @Component({
@@ -26,6 +26,7 @@ export class DiagramComponent {
   sheetConfig;
 
   stageLines;
+  subsystemViews: SubsystemView[] = [];
   subsystemCircles;
   entryViews;
   pivots;
@@ -126,29 +127,36 @@ export class DiagramComponent {
     const radiusIncrement = (this.radius - this.smallestRadius) / (entries.length - 1)
 
     let currentSubsystem = null;
-    const subsystemsRepresented = [];
     for(let iEntry = 0; iEntry < entries.length; iEntry++) {
       const entry = entries[iEntry];
       const entryView = new EntryView(entry);
 
-      const subsystemClass = this.createClassNameFromString(entry.primarySubsystem.subsystem.name);
+      const subsystem = entry.primarySubsystem.subsystem;
+      const subsystemClass = this.createClassNameFromString(subsystem.name);
       entryView.addClass("subsystem_" + subsystemClass);
-
-      if (currentSubsystem != subsystemClass) {
-        currentSubsystem = subsystemClass;
-        subsystemsRepresented.push(currentSubsystem);
-      }
 
       const radius = this.smallestRadius + iEntry * radiusIncrement;
       entryView.radius = radius;
+
+      if (currentSubsystem != subsystemClass) {
+        currentSubsystem = subsystemClass;
+
+        if(this.subsystemViews.length) {
+          const previousSubsystemView = this.subsystemViews[this.subsystemViews.length - 1];
+          previousSubsystemView.radiusEnd = radius - radiusIncrement;
+          previousSubsystemView.radiusMiddle = previousSubsystemView.radiusEnd - previousSubsystemView.radiusStart;
+        }
+
+        this.subsystemViews.push(new SubsystemView(subsystem, radius, 0, 0));
+      }
 
       entryView.arcs = this.buildArcsWithRadius(entry, radius);
 
       entryViews.push(entryView);
     }
 
-    console.log(`The following ${subsystemsRepresented.length} subsystems are represented in the current diagram (showing their auto-generated class names):`)
-    console.log(subsystemsRepresented);
+    console.log(`The following ${this.subsystemViews.length} subsystems are represented in the current diagram (showing their auto-generated class names):`)
+    console.log(this.subsystemViews);
     console.log('\n');
 
     // Add arcs for secondary subsystems
