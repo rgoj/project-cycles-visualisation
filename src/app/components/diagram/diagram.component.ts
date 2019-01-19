@@ -31,6 +31,7 @@ export class DiagramComponent {
   pivots;
   pivotsMap;
 
+  entryViewPreviewed: Entry;
   pivotSelected: string|null = null;
 
   constructor(private dataService: DataService) {
@@ -52,13 +53,25 @@ export class DiagramComponent {
       }
     });
 
+    this.dataService.getEntryPreviewed().subscribe((entry) => {
+      this.entryViewPreviewed = this.entryViews.find((entryView: EntryView) => {
+        return entryView.entry === entry
+      });
+    });
+
     this.dataService.getPivotSelected().subscribe((pivotName) => {
       this.changePivot(pivotName);
-    })
+    });
   }
 
-  hover(entryView) {
+  previewOn(entryView: EntryView) {
     this.dataService.previewEntry(entryView.entry);
+    entryView.addClass('entry_preview');
+  }
+
+  previewOff(entryView: EntryView) {
+    this.dataService.previewEntry(null);
+    entryView.deleteClass('entry_preview');
   }
 
   calculateStageLine(stage) {
@@ -160,14 +173,14 @@ export class DiagramComponent {
 
   changePivot(pivotName: string) {
     if (pivotName) {
-      for (const entryView of this.entryViews) entryView.addClass('fade');
+      for (const entryView of this.entryViews) entryView.addClass('entry_fade');
 
       for (const entry of this.pivotsMap.get(pivotName)) {
         const entryView = this.entryViews.find((entryView) => entryView.entry == entry);
-        entryView.deleteClass('fade');
+        entryView.deleteClass('entry_fade');
       }
     } else {
-      for (const entryView of this.entryViews) entryView.deleteClass('fade');
+      for (const entryView of this.entryViews) entryView.deleteClass('entry_fade');
     }
   }
 

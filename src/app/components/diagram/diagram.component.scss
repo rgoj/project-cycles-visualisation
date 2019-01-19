@@ -17,20 +17,6 @@
   color: blue;
 }
 
-
-.entry circle {
-  display: none;
-  // stroke: lightgray;
-  stroke-width: 1;
-  fill: none;
-}
-
-.entry__arc {
-  // stroke: blue;
-  stroke-width: 3;
-  fill-opacity: 0;
-}
-
 .primary-subsystem_individual-home {
   stroke: #ffc700;
 }
@@ -79,6 +65,28 @@
   stroke: #4fb5f7;
 }
 
-.fade {
-  opacity: 0.1;
+
+.entry {
+  circle {
+    display: none;
+    // stroke: lightgray;
+    stroke-width: 1;
+    fill: none;
+  }
+
+  .entry__arc {
+    // stroke: blue;
+    stroke-width: 3;
+    fill-opacity: 0;
+  }
+
+  &.entry_preview {
+    .entry__arc {
+      stroke-width: 10;
+    }
+  }
+
+  &.entry_fade {
+    opacity: 0.1;
+  }
 }

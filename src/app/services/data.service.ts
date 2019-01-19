@@ -51,6 +51,10 @@ export class DataService {
     return this.data;
   }
 
+  getEntryPreviewed() {
+    return this.entryPreviewed;
+  }
+
   getPivotSelected() {
     return this.pivotSelected;
   }

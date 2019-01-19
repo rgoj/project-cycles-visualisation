@@ -42,7 +42,8 @@
 
   <g *ngFor="let entry of entryViews; index as i" 
      [attr.class]="'entry ' + entry.class"
-     (mouseover)="hover(entry)">
+     (mouseenter)="previewOn(entry)"
+     (mouseleave)="previewOff(entry)">
     <circle [attr.cx]="centreX"
             [attr.cy]="centreY"
             [attr.r]="entry.radius"/>
