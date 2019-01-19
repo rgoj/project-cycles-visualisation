@@ -13,6 +13,7 @@ export class ListComponent implements OnInit {
 
   pivots: any;
   currentPivot: string;
+  currentPivotEntries: Entry[];
 
   entryPreviewed: Entry;
   entrySelected: Entry;
