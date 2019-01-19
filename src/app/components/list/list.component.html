@@ -1,11 +1,13 @@
-<div *ngIf="entryPreviewed" class="entry-previewed">
-  <h1>Previewing entry</h1>
-  <p>
-    {{ entryPreviewed.text }}
-  </p>
-</div>
+<div class="container">
+  <div *ngIf="entryPreviewed" class="entry-previewed">
+    <h1>Previewing entry</h1>
+    <p>
+      {{ entryPreviewed.text }}
+    </p>
+  </div>
 
-<h1>All entries</h1>
-<ul>
-  <li *ngFor="let entry of data.entries">{{ entry.text }}</li>
-</ul>
+  <h1>All entries</h1>
+  <ul>
+    <li *ngFor="let entry of data.entries">{{ entry.text }}</li>
+  </ul>
+</div>

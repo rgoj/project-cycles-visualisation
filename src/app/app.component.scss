@@ -4,10 +4,9 @@
 }
 
 app-diagram {
-    display: block;
-    width: 80%;
+    flex-shrink: 0;
+    width: 100vh;
 }
 
-app-list {
-    width: 20%;
-}
+// app-list {
+// }
