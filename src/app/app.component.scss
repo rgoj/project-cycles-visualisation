@@ -1,0 +1,13 @@
+.main {
+    display: flex;
+    flex-direction: row;
+}
+
+app-diagram {
+    display: block;
+    width: 80%;
+}
+
+app-list {
+    width: 20%;
+}
