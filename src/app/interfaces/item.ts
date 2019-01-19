@@ -25,11 +25,15 @@ export class SubsystemView {
   radiusEnd: number;
   radiusMiddle: number;
 
-  constructor(subsystem: Subsystem, start: number, end: number, middle:number) {
+  constructor(subsystem: Subsystem, start: number, end: number) {
     this.subsystem = subsystem;
     this.radiusStart = start;
     this.radiusEnd = end;
-    this.radiusMiddle = middle;
+    this.calculateRadiusMiddle();
+  }
+
+  calculateRadiusMiddle() {
+    this.radiusMiddle = this.radiusStart + (this.radiusEnd - this.radiusStart) / 2;
   }
 }
 

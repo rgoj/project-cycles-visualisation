@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import * as _ from 'lodash';
 
+import { diagramConfig } from '../../diagram.config';
 import { DataService } from '../../services/data.service';
 import { Entry, SubsystemView, SubsystemCircle, EntryView } from '../../interfaces/item';
 
@@ -12,7 +13,7 @@ import { Entry, SubsystemView, SubsystemCircle, EntryView } from '../../interfac
   styleUrls: ['./diagram.component.scss']
 })
 export class DiagramComponent {
-  diagramConfig;
+  diagramConfig = diagramConfig;
 
   scale = 1000;
 
@@ -26,6 +27,7 @@ export class DiagramComponent {
   sheetConfig;
 
   stageLines;
+  subsystems;
   subsystemViews: SubsystemView[] = [];
   subsystemCircles;
   entryViews;
@@ -47,6 +49,7 @@ export class DiagramComponent {
         this.pivots = data.pivots;
         this.pivotsMap = data.pivotsMap;
         this.stageLines = data.stages.map(stage => this.calculateStageLine(stage));
+        this.subsystems = data.subsystems;
         this.subsystemCircles = data.subsystems.map(
           subsystem => this.calculateSubsystemCircle(subsystem)
         );
@@ -141,14 +144,18 @@ export class DiagramComponent {
       if (currentSubsystem != subsystemClass) {
         currentSubsystem = subsystemClass;
 
-        if(this.subsystemViews.length) {
+        if(iEntry > 0) {
           const previousSubsystemView = this.subsystemViews[this.subsystemViews.length - 1];
           previousSubsystemView.radiusEnd = radius - radiusIncrement;
-          previousSubsystemView.radiusMiddle = previousSubsystemView.radiusEnd - previousSubsystemView.radiusStart;
+          previousSubsystemView.calculateRadiusMiddle();
         }
 
-        this.subsystemViews.push(new SubsystemView(subsystem, radius, 0, 0));
+        this.subsystemViews.push(new SubsystemView(subsystem, radius, 0));
       }
+
+      const previousSubsystemView = this.subsystemViews[this.subsystemViews.length - 1];
+      previousSubsystemView.radiusEnd = this.radius;
+      previousSubsystemView.calculateRadiusMiddle();
 
       entryView.arcs = this.buildArcsWithRadius(entry, radius);
 
@@ -159,6 +166,24 @@ export class DiagramComponent {
     console.log(this.subsystemViews);
     console.log('\n');
 
+    // Add views for any subsystems that sadly aren't represented...
+    for(let iSubsystem = 0; iSubsystem < this.diagramConfig.subsystems.length; iSubsystem++) {
+      const subsystemName = this.diagramConfig.subsystems[iSubsystem].header;
+      const subsystemView = this.subsystemViews.find((subsystemView) => {
+        return subsystemView.subsystem.name === subsystemName;
+      });
+      if (!subsystemView) {
+        const subsystem = this.subsystems.find((subsystem) => subsystem.name === subsystemName);
+        // TODO: This will break in cases other than my current one where I know the only missing 
+        // subsystem view is "Ecological"
+        const radiusStart = this.subsystemViews[iSubsystem - 1].radiusEnd;
+        const radiusEnd = this.subsystemViews[iSubsystem + 1].radiusStart;
+        this.subsystemViews.push(new SubsystemView(subsystem, radiusStart, radiusEnd));
+      }
+    }
+
+
+
     // Add arcs for secondary subsystems
     for(let iEntry = 0; iEntry < entries.length; iEntry++) {
       const entryView = entryViews[iEntry];
@@ -168,8 +193,12 @@ export class DiagramComponent {
         const entrySubsystem = entryView.entry.subsystems[iSubsystem];
         const subsystemClass = this.createClassNameFromString(entrySubsystem.subsystem.name);
 
+        const subsystemView = this.subsystemViews.find((subsystemView) => {
+          return subsystemView.subsystem.name === entrySubsystem.subsystem.name;
+        });
+
         if(entrySubsystem.status === 'secondary') {
-          entryView.secondaryArcs[subsystemClass] = this.buildArcsWithRadius(entryView.entry, entryView.radius + (iSubsystem + 1) * 50);
+          entryView.secondaryArcs[subsystemClass] = this.buildArcsWithRadius(entryView.entry, subsystemView.radiusMiddle);
         }
       }
     }

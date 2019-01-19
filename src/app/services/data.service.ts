@@ -90,7 +90,7 @@ export class DataService {
 
       indexFirstSubsystem: indexFirstSubsystem,
       indexLastSubsystem: indexLastSubsystem,
-      numberOfSubsystems: indexLastStage - indexFirstStage + 1,
+      numberOfSubsystems: indexLastSubsystem - indexFirstSubsystem + 1,
 
       indexFirstPivot: indexFirstPivot,
       indexLastPivot: indexLastPivot,
