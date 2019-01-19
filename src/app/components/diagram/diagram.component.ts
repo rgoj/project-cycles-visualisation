@@ -65,15 +65,19 @@ export class DiagramComponent {
   }
 
   previewOn(entryView: EntryView) {
-    this.dataService.previewEntry(entryView.entry);
-    this.addClassToAllEntries('entry_fade-partial');
-    entryView.addClass('entry_preview');
+    if(!this.pivotSelected || entryView.entry.pivots.includes(this.pivotSelected)) {
+      this.dataService.previewEntry(entryView.entry);
+      this.addClassToAllEntries('entry_fade-partial');
+      entryView.addClass('entry_preview');
+    }
   }
 
   previewOff(entryView: EntryView) {
-    this.dataService.previewEntry(null);
-    this.deleteClassFromAllEntries('entry_fade-partial');
-    entryView.deleteClass('entry_preview');
+    if(!this.pivotSelected || entryView.entry.pivots.includes(this.pivotSelected)) {
+      this.dataService.previewEntry(null);
+      this.deleteClassFromAllEntries('entry_fade-partial');
+      entryView.deleteClass('entry_preview');
+    }
   }
 
   calculateStageLine(stage) {
@@ -174,6 +178,8 @@ export class DiagramComponent {
 
 
   changePivot(pivotName: string) {
+    this.pivotSelected = pivotName;
+
     if (pivotName) {
       this.addClassToAllEntries('entry_fade');
 

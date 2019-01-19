@@ -36,11 +36,14 @@ export class Entry {
 
   stages: EntryStage[];
 
+  pivots: string[];
+
   constructor() {
     this.text = '';
     this.stages = [];
     this.subsystems = [];
     this.primarySubsystem = null;
+    this.pivots = [];
   }
 }
 

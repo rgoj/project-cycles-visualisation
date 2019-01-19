@@ -92,7 +92,12 @@ $animation-duration-ultra-short: 50ms;
   }
 
   &.entry_fade {
-    opacity: 0.1;
+    opacity: 0.09;
+    transition: opacity $animation-duration-short ease-out;
+  }
+
+  &.entry_fade.entry_fade-partial {
+    opacity: 0;
     transition: opacity $animation-duration-short ease-out;
   }
 

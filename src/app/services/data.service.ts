@@ -132,7 +132,6 @@ export class DataService {
     for (let i = this.sheetConfig.indexFirstEntry; i < this.rawData.values.length; i++) {
       const entryRow = this.rawData.values[i];
       const entry = new Entry();
-      let pivots: string[] = [];
 
       entry.text = entryRow[1];
 
@@ -142,12 +141,12 @@ export class DataService {
 
       entry.stages = this.processEntryStages(entryRow);
 
-      pivots = this.processEntryPivots(entryRow)
+      entry.pivots = this.processEntryPivots(entryRow)
 
       if (continueProcessing) {
         this.entries.push(entry);
 
-        for (const pivot of pivots) {
+        for (const pivot of entry.pivots) {
           if (this.pivotsMap.has(pivot)) {
             this.pivotsMap.get(pivot).push(entry);
           } else {
