@@ -150,10 +150,7 @@ export class DataService {
             this.pivotsMap.set(pivot, [entry])
           }
         }
-      } else {
-        // We should never get here
-        console.error('An unexpected problem occured when processing entry:', entry, '\n');
-      }
+      } 
     }
     console.log('The following entries have been identified:')
     console.log(this.entries);
@@ -201,37 +198,34 @@ export class DataService {
   }
 
   private checkEntry(i: number, entry: Entry): boolean {
-    let continueProcessing;
     const omitMessage = `Omitting the following entry (spreadsheet row ${i + 1}) because `;
 
     if (entry.subsystems.length === 0) {
       console.log(omitMessage + 'it does not have any subsystems defined:');
       console.log(entry.text)
       console.log('\n');
-      continueProcessing = false;
+      return false;
     }
 
     if (entry.primarySubsystem === undefined) {
       console.log(omitMessage + 'neither of its subsystems is declared primary:');
       console.log(entry.text)
       console.log('\n');
-      continueProcessing = false;
+      return false;
 
       // Another option would be to select any of the subsystems as primary...
       // entry.primarySubsystem = entry.subsystems[0];
     }
 
     if (entry.text && entry.primarySubsystem) {
-      continueProcessing = true;
+      return true;
     } else {
       // We should never get here
       console.error(omitMessage + 'for unknown reasons - is there an unknown problem?');
       console.log(entry.text)
       console.log('\n');
-      continueProcessing = false;
+      return false;
     }
-
-    return continueProcessing;
   }
 
   private processEntryStages(entryRow: []): EntryStage[] {
@@ -276,7 +270,7 @@ export class DataService {
 
       if (state == 'YES') {
         pivots.push(pivotName);
-      } else if (state == null) {
+      } else if (!state) {
         continue;
       } else {
         console.error(

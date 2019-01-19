@@ -159,7 +159,6 @@ export class DiagramComponent {
 
 
   changePivot(pivotName: string) {
-    console.log('Calling `changePivot` with pivotName: ', pivotName);
     if (pivotName) {
       for (const entryView of this.entryViews) entryView.addClass('fade');
 
@@ -168,7 +167,6 @@ export class DiagramComponent {
         entryView.deleteClass('fade');
       }
     } else {
-      console.log('!!! Changing pivot to null!')
       for (const entryView of this.entryViews) entryView.deleteClass('fade');
     }
   }
