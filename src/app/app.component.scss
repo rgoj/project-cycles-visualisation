@@ -8,5 +8,7 @@ app-diagram {
     width: 100vh;
 }
 
-// app-list {
-// }
+app-list {
+    max-height: 100vh;
+    overflow-y: scroll;
+}
