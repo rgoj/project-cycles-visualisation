@@ -148,8 +148,8 @@ export class DataService {
     console.log(this.entries);
 
     // Testing that the pivots contain the same objects as the entries! :)
-    this.pivots.get('Current')[0].text = 'Kowabonga!';
-    console.log(this.pivots.get('Current')[0]);
+    // this.pivots.get('Current')[0].text = 'Kowabonga!';
+    // console.log(this.pivots.get('Current')[0]);
 
     console.log('The following pivots have been identified:')
     console.log(this.pivots);
