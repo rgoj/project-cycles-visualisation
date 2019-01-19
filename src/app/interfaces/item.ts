@@ -79,7 +79,10 @@ export class EntryStage {
 
 export class EntryView {
   entry: Entry;
+
   arcs: any;
+  secondaryArcs: any;
+  firstStageLine: any;
 
   private classes: Set<string>;
   class: string;

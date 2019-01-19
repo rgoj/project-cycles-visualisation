@@ -94,27 +94,21 @@
     
   </g>
 
-  <!-- Example arcs! -->
-  <!-- <path stroke="blue"
-        stroke-width="5"
-        fill-opacity="0"
-        d="M 1000,550
-           A 50,50 0 0 0 1050,500" />
-  <path stroke="red"
-        stroke-width="5"
-        fill-opacity="0"
-        d="M 1000,550
-           A 50,50 0 1 0 1050,500" />
-  <path stroke="green"
-        stroke-width="5"
-        fill-opacity="0"
-        d="M 1000,550
-           A 50,50 0 0 1 1050,500" />
-  <path stroke="brown"
-        stroke-width="5"
-        fill-opacity="0"
-        d="M 1000,550
-           A 50,50 0 1 1 1050,500" /> -->
+
+  <g *ngIf="entryViewPreviewed">
+    <text>{{entrySelected}}</text>
+
+    <g *ngFor="let subsystem of entryViewPreviewed.secondaryArcs | keyvalue"
+       [attr.class]="'entry subsystem_' + subsystem.key + ' entry_preview entry_secondary'">
+
+      <path *ngFor="let arc of subsystem.value"
+            class="entry__arc"
+            pointer-events="visibleStroke"
+            [attr.d]="'M ' + arc.startX + ',' + arc.startY +
+                      'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 1 ' + arc.endX + ',' + arc.endY" />
+    </g>
+  </g>
+
 
 </svg>
 

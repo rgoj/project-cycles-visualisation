@@ -132,7 +132,7 @@ export class DiagramComponent {
       const entryView = new EntryView(entry);
 
       const subsystemClass = this.createClassNameFromString(entry.primarySubsystem.subsystem.name);
-      entryView.addClass("primary-subsystem_" + subsystemClass);
+      entryView.addClass("subsystem_" + subsystemClass);
 
       if (currentSubsystem != subsystemClass) {
         currentSubsystem = subsystemClass;
@@ -149,6 +149,25 @@ export class DiagramComponent {
 
     console.log(`The following ${subsystemsRepresented.length} subsystems are represented in the current diagram (showing their auto-generated class names):`)
     console.log(subsystemsRepresented);
+    console.log('\n');
+
+    // Add arcs for secondary subsystems
+    for(let iEntry = 0; iEntry < entries.length; iEntry++) {
+      const entryView = entryViews[iEntry];
+      entryView.secondaryArcs = {};
+
+      for(let iSubsystem = 0; iSubsystem < entryView.entry.subsystems.length; iSubsystem++) {
+        const entrySubsystem = entryView.entry.subsystems[iSubsystem];
+        const subsystemClass = this.createClassNameFromString(entrySubsystem.subsystem.name);
+
+        if(entrySubsystem.status === 'secondary') {
+          entryView.secondaryArcs[subsystemClass] = this.buildArcsWithRadius(entryView.entry, entryView.radius + (iSubsystem + 1) * 50);
+        }
+      }
+    }
+    
+    console.log(`The following views have been created for each entry:`)
+    console.log(entryViews);
     console.log('\n');
 
     return entryViews;

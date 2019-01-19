@@ -17,51 +17,51 @@
   color: blue;
 }
 
-.primary-subsystem_individual-home {
+.subsystem_individual-home {
   stroke: #ffc700;
 }
 
-.primary-subsystem_health-wellbeing {
+.subsystem_health-wellbeing {
   stroke: #00d5da;
 }
 
-.primary-subsystem_social {
+.subsystem_social {
   stroke: #ffacca;
 }
 
-.primary-subsystem_cultural {
+.subsystem_cultural {
   stroke: #ffa900;
 }
 
-.primary-subsystem_education {
+.subsystem_education {
   stroke: #00d596;
 }
 
-.primary-subsystem_ecological {
+.subsystem_ecological {
   stroke: #bb62c8;
 }
 
-.primary-subsystem_technology {
+.subsystem_technology {
   stroke: #0094da;
 }
 
-.primary-subsystem_economic {
+.subsystem_economic {
   stroke: #f02300;
 }
 
-.primary-subsystem_political {
+.subsystem_political {
   stroke: #d6e048;
 }
 
-.primary-subsystem_policy-regulation {
+.subsystem_policy-regulation {
   stroke: #f25b8d;
 }
 
-.primary-subsystem_service-profession {
+.subsystem_service-profession {
   stroke: #aad278;
 }
 
-.primary-subsystem_project {
+.subsystem_project {
   stroke: #4fb5f7;
 }
 
@@ -80,14 +80,13 @@ $animation-duration-ultra-short: 50ms;
   }
 
   .entry__arc {
-    // stroke: blue;
     stroke-width: 3;
     fill-opacity: 0;
     transition: stroke-width $animation-duration-ultra-short ease-out;
   }
 
   &.entry_fade-partial {
-    opacity: 0.5;
+    opacity: 0.4;
     transition: opacity $animation-duration-short ease-out;
   }
 
@@ -108,6 +107,10 @@ $animation-duration-ultra-short: 50ms;
       stroke-width: 20;
       z-index: 100;
       transition: stroke-width $animation-duration-ultra-short ease-in;
+    }
+
+    &.entry_secondary .entry__arc {
+      stroke-width: 13;
     }
   }
 }
