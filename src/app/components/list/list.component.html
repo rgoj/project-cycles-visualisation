@@ -1,13 +1,12 @@
 <div class="container">
   <h1>How might citizen empowerement form the basis of changes in the urban environment?</h1>
 
-  <div *ngIf="entryPreviewed" class="entry-previewed">
+  <!-- <div *ngIf="entryPreviewed" class="entry-previewed">
     <h1>Previewing entry</h1>
     <p>
       {{ entryPreviewed.text }}
     </p>
-  </div>
-
+  </div> -->
 
   <mat-accordion>
     <mat-expansion-panel *ngFor="let pivot of data.pivots"
@@ -19,23 +18,11 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <ul>
+      <ul class="pivot-entries">
         <li *ngFor="let entry of pivot.entries">{{ entry.text }}</li>
       </ul>
     </mat-expansion-panel>
   </mat-accordion>
-
-  {{ pivotSelected }}
-
-
-
-
-
-
-
-
-
-
 
   <!-- <ul>
     <li *ngFor="let entry of data.entries">{{ entry.text }}</li>
