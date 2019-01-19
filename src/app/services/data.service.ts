@@ -13,11 +13,13 @@ export class DataService {
   rawData: any;
   data = new BehaviorSubject<any>(null);
 
+  diagramConfig = diagramConfig;
+  sheetConfig;
+
+  pivotSelected = new BehaviorSubject<string>(diagramConfig.pivot);
   entryPreviewed = new BehaviorSubject<Entry>(null);
   entrySelected = new BehaviorSubject<Entry>(null);
 
-  diagramConfig = diagramConfig;
-  sheetConfig;
 
   stages = [];
   subsystems = [];
@@ -41,12 +43,16 @@ export class DataService {
     });
   }
 
+  getConfig() {
+    return this.diagramConfig;
+  }
+
   getData() {
     return this.data;
   }
 
-  getConfig() {
-    return this.diagramConfig;
+  getPivotSelected() {
+    return this.pivotSelected;
   }
 
   previewEntry(entry: Entry) {
@@ -57,7 +63,11 @@ export class DataService {
     this.entrySelected.next(entry);
   }
 
-  processData() {
+  selectPivot(pivotName: string) {
+    this.pivotSelected.next(pivotName);
+  }
+
+  private processData() {
     const indexFirstStage = this.convertColumn('M');
     const indexLastStage = this.convertColumn('Z');
 
@@ -159,7 +169,7 @@ export class DataService {
   }
 
 
-  processEntrySubsystems(entryRow: []): EntrySubsystem[] {
+  private processEntrySubsystems(entryRow: []): EntrySubsystem[] {
     const subsystems = [];
 
     for (let i = 0; i < this.sheetConfig.numberOfSubsystems; i++) {
@@ -186,11 +196,11 @@ export class DataService {
     return subsystems;
   }
 
-  findPrimarySubsystem(subsystems: EntrySubsystem[]): EntrySubsystem {
+  private findPrimarySubsystem(subsystems: EntrySubsystem[]): EntrySubsystem {
     return subsystems.find(x => x.status === 'primary');
   }
 
-  checkEntry(i: number, entry: Entry): boolean {
+  private checkEntry(i: number, entry: Entry): boolean {
     let continueProcessing;
     const omitMessage = `Omitting the following entry (spreadsheet row ${i + 1}) because `;
 
@@ -224,7 +234,7 @@ export class DataService {
     return continueProcessing;
   }
 
-  processEntryStages(entryRow: []): EntryStage[] {
+  private processEntryStages(entryRow: []): EntryStage[] {
     const entryStages: EntryStage[] = [];
 
     let firstStageIndex: null|number = null;
@@ -256,7 +266,7 @@ export class DataService {
     return entryStages;
   }
 
-  processEntryPivots(entryRow): string[] {
+  private processEntryPivots(entryRow): string[] {
     const pivots: string[] = [];
 
     for (let i = 0; i < this.sheetConfig.numberOfPivots; i++) {
@@ -295,7 +305,7 @@ export class DataService {
    */
   // Converts Excel column to index
   // Source: https://stackoverflow.com/questions/9905533/convert-excel-column-alphabet-e-g-aa-to-number-e-g-25
-  convertColumn(column: string) {
+  private convertColumn(column: string) {
     const base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let result = 0;
   

@@ -31,6 +31,8 @@ export class DiagramComponent {
   pivots;
   pivotsMap;
 
+  pivotSelected: string|null = null;
+
   constructor(private dataService: DataService) {
     this.diagramConfig = this.dataService.diagramConfig;
 
@@ -49,6 +51,10 @@ export class DiagramComponent {
         this.entryViews = this.buildViewsFromEntries(data.entries);
       }
     });
+
+    this.dataService.getPivotSelected().subscribe((pivotName) => {
+      this.changePivot(pivotName);
+    })
   }
 
   hover(entryView) {
@@ -144,18 +150,6 @@ export class DiagramComponent {
       entryViews.push(entryView);
     }
 
-    const pivot = this.diagramConfig.pivot;
-    if (pivot) {
-      for (const entryView of entryViews) {
-        entryView.addClass('fade');
-      }
-
-      for (const entry of this.pivotsMap.get(pivot)) {
-        const entryView = entryViews.find((entryView) => entryView.entry == entry);
-        entryView.deleteClass('fade');
-      }
-    }
-
     console.log(`The following ${subsystemsRepresented.length} subsystems are represented in the current diagram (showing their auto-generated class names):`)
     console.log(subsystemsRepresented);
     console.log('\n');
@@ -164,6 +158,20 @@ export class DiagramComponent {
   }
 
 
+  changePivot(pivotName: string) {
+    console.log('Calling `changePivot` with pivotName: ', pivotName);
+    if (pivotName) {
+      for (const entryView of this.entryViews) entryView.addClass('fade');
+
+      for (const entry of this.pivotsMap.get(pivotName)) {
+        const entryView = this.entryViews.find((entryView) => entryView.entry == entry);
+        entryView.deleteClass('fade');
+      }
+    } else {
+      console.log('!!! Changing pivot to null!')
+      for (const entryView of this.entryViews) entryView.deleteClass('fade');
+    }
+  }
 
 
   /*

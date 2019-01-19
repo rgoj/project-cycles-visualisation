@@ -1,6 +1,6 @@
 export const diagramConfig = {
-  // pivot: false,
-  pivot: 'Current',
+  pivot: null,
+  // pivot: 'Current',
   // pivot: 'Potential Disruption',
   // pivot: 'Disruption',
   // pivot: 'Outside UK',

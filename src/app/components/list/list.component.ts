@@ -12,8 +12,7 @@ export class ListComponent implements OnInit {
   data: any;
 
   pivots: any;
-  currentPivot: string;
-  currentPivotEntries: Entry[];
+  pivotSelected: string;
 
   entryPreviewed: Entry;
   entrySelected: Entry;
@@ -26,6 +25,8 @@ export class ListComponent implements OnInit {
       console.log(this.data);
       console.log(this.pivots);
     });
+
+    this.dataService.getPivotSelected().subscribe((pivotName) => this.pivotSelected = pivotName);
 
     this.dataService.entryPreviewed.subscribe((entryPreviewed) => {
       this.entryPreviewed = entryPreviewed;
@@ -40,10 +41,11 @@ export class ListComponent implements OnInit {
   }
 
   setPivot(pivotName) {
-    this.currentPivot = pivotName;
+    this.pivotSelected = pivotName;
+    this.dataService.selectPivot(pivotName);
   }
 
   closePivot(pivotName) {
-    if(this.currentPivot === pivotName) this.currentPivot = null;
+    if(this.pivotSelected === pivotName) this.setPivot(null);
   }
 }
