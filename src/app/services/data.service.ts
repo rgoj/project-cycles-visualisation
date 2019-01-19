@@ -22,7 +22,9 @@ export class DataService {
   stages = [];
   subsystems = [];
   entries: Entry[] = [];
-  pivots = new Map<string, Entry[]>();
+  pivots: Pivot[];
+
+  pivotsMap = new Map<string, Entry[]>();
 
   constructor(private googleSheets: GoogleSheetsService) {
     this.googleSheets.getData().subscribe((data) => {
@@ -33,7 +35,8 @@ export class DataService {
         stages: this.stages,
         subsystems: this.subsystems,
         entries: this.entries,
-        pivots: this.pivots
+        pivots: this.pivots,
+        pivotsMap: this.pivotsMap
       })
     });
   }
@@ -131,12 +134,10 @@ export class DataService {
         this.entries.push(entry);
 
         for (const pivot of pivots) {
-          if (this.pivots.has(pivot)) {
-            this.pivots.get(pivot).push(entry);
-            // pivotEntries.push(entry);
-            // this.pivots.set()
+          if (this.pivotsMap.has(pivot)) {
+            this.pivotsMap.get(pivot).push(entry);
           } else {
-            this.pivots.set(pivot, [entry])
+            this.pivotsMap.set(pivot, [entry])
           }
         }
       } else {
@@ -148,8 +149,10 @@ export class DataService {
     console.log(this.entries);
 
     // Testing that the pivots contain the same objects as the entries! :)
-    // this.pivots.get('Current')[0].text = 'Kowabonga!';
-    // console.log(this.pivots.get('Current')[0]);
+    // this.pivotsMap.get('Current')[0].text = 'Kowabonga!';
+    // console.log(this.pivotsMap.get('Current')[0]);
+
+    this.pivots = this.createPivotsArray(this.pivotsMap);
 
     console.log('The following pivots have been identified:')
     console.log(this.pivots);
@@ -277,6 +280,15 @@ export class DataService {
     
     return pivots;
   }
+
+  private createPivotsArray(pivotsMap: Map<string, Entry[]>): Pivot[] {
+    const pivotsArray = Array.from(pivotsMap.entries()).map((pivotData) => {
+      const pivot = new Pivot(pivotData[0], pivotData[1]);
+      return pivot;
+    });
+    return pivotsArray;
+  }
+
 
   /*
    * Helper functions

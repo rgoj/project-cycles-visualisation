@@ -47,6 +47,11 @@ export class Entry {
 export class Pivot {
   name: string;
   entries: Entry[];
+
+  constructor(name: string, entries: Entry[]) {
+    this.name = name;
+    this.entries = entries;
+  }
 }
 
 export class EntrySubsystem {

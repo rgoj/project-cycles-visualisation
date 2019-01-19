@@ -29,6 +29,7 @@ export class DiagramComponent {
   subsystemCircles;
   entryViews;
   pivots;
+  pivotsMap;
 
   constructor(private dataService: DataService) {
     this.diagramConfig = this.dataService.diagramConfig;
@@ -40,6 +41,7 @@ export class DiagramComponent {
         this.circleRadialDistance = this.radius / (data.subsystems.length + 1);
 
         this.pivots = data.pivots;
+        this.pivotsMap = data.pivotsMap;
         this.stageLines = data.stages.map(stage => this.calculateStageLine(stage));
         this.subsystemCircles = data.subsystems.map(
           subsystem => this.calculateSubsystemCircle(subsystem)
@@ -148,7 +150,7 @@ export class DiagramComponent {
         entryView.addClass('fade');
       }
 
-      for (const entry of this.pivots.get(pivot)) {
+      for (const entry of this.pivotsMap.get(pivot)) {
         const entryView = entryViews.find((entryView) => entryView.entry == entry);
         entryView.deleteClass('fade');
       }
