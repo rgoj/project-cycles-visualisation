@@ -16,7 +16,7 @@ export class DiagramComponent {
 
   scale = 1000;
 
-  centreX = this.scale / 2 + 50;
+  centreX = this.scale / 2 + 30;
   centreY = this.scale / 2;
 
   radius = 450;
@@ -66,11 +66,13 @@ export class DiagramComponent {
 
   previewOn(entryView: EntryView) {
     this.dataService.previewEntry(entryView.entry);
+    this.addClassToAllEntries('entry_fade-partial');
     entryView.addClass('entry_preview');
   }
 
   previewOff(entryView: EntryView) {
     this.dataService.previewEntry(null);
+    this.deleteClassFromAllEntries('entry_fade-partial');
     entryView.deleteClass('entry_preview');
   }
 
@@ -173,17 +175,24 @@ export class DiagramComponent {
 
   changePivot(pivotName: string) {
     if (pivotName) {
-      for (const entryView of this.entryViews) entryView.addClass('entry_fade');
+      this.addClassToAllEntries('entry_fade');
 
       for (const entry of this.pivotsMap.get(pivotName)) {
         const entryView = this.entryViews.find((entryView) => entryView.entry == entry);
         entryView.deleteClass('entry_fade');
       }
     } else {
-      for (const entryView of this.entryViews) entryView.deleteClass('entry_fade');
+      this.deleteClassFromAllEntries('entry_fade');
     }
   }
 
+  addClassToAllEntries(className) {
+    for (const entryView of this.entryViews) entryView.addClass(className);
+  }
+
+  deleteClassFromAllEntries(className) {
+    for (const entryView of this.entryViews) entryView.deleteClass(className);
+  }
 
   /*
    * Helper function: medium abstraction
