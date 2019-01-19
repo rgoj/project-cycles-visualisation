@@ -3,6 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
+import { MaterialModule } from './material.module';
+
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +24,8 @@ import { ListComponent } from './components/list/list.component';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+
+    MaterialModule,
 
     NgxWebstorageModule.forRoot(),
 
