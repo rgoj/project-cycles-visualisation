@@ -16,7 +16,7 @@ export class DiagramComponent {
 
   scale = 1000;
 
-  centreX = this.scale;
+  centreX = this.scale / 2;
   centreY = this.scale / 2;
 
   radius = 490;
