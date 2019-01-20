@@ -35,9 +35,8 @@
                               label.edgeX + ', ' +
                               (label.edgeY) +
                             ')
-                            rotate(' + (180 + 360 * label.angle) + ')
-                            translate(5, -5)
-                          '">
+                            rotate(' + ((label.angle < 0.25 || label.angle > 0.75 ? 0 : 180) + 360 * label.angle) + ')' +
+                            (label.angle < 0.25 || label.angle > 0.75 ? 'translate(0, 14)' : 'translate(0, -5)')">
     {{label.stage.name}}
   </text>
 
