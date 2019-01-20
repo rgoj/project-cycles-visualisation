@@ -66,6 +66,7 @@
 }
 
 
+$animation-duration-medium: 400ms;
 $animation-duration-short: 225ms;
 $animation-duration-ultra-short: 50ms;
 
@@ -111,7 +112,7 @@ $animation-duration-ultra-short: 50ms;
 
     &.entry_secondary .entry__arc {
       stroke-width: 10;
-      opacity: 1;
+      animation: secondary-arc-animation $animation-duration-medium ease-in;
     }
 
   }
@@ -119,5 +120,20 @@ $animation-duration-ultra-short: 50ms;
   &.entry__first-stage-line {
     stroke-width: 5;
     stroke-linecap: round;
+    animation: secondary-arc-animation $animation-duration-medium ease-in;
+  }
+}
+
+@keyframes secondary-arc-animation {
+  0% {
+    opacity: 0;
+    stroke-width: 1;
+  }
+  50% {
+    opacity: 0.5;
+    stroke-width: 20;
+  }
+  100% {
+    stroke-width: 10;
   }
 }

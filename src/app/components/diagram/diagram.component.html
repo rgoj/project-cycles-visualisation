@@ -111,7 +111,7 @@
 
       <path *ngFor="let arc of subsystem.value"
             class="entry__arc"
-            pointer-events="visibleStroke"
+            pointer-events="none"
             [attr.d]="'M ' + arc.startX + ',' + arc.startY +
                       'A ' + arc.radius + ',' + arc.radius + ' 0 ' + arc.largeArcFlag + ' 1 ' + arc.endX + ',' + arc.endY" />
     </g>
