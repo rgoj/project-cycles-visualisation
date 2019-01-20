@@ -50,6 +50,14 @@ export class ListComponent implements OnInit {
     if(this.pivotSelected === pivotName) this.setPivot(null);
   }
 
+  previewOn(entry: Entry) {
+    this.dataService.previewEntry(entry);
+  }
+
+  previewOff(entry: Entry) {
+    this.dataService.previewEntry(null);
+  }
+
   convertMapToObject(map) {
     let object = Object.create(null);
     for (let property of Array.from(map.entries())) {

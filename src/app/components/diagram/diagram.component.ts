@@ -34,7 +34,7 @@ export class DiagramComponent {
   pivots;
   pivotsMap;
 
-  entryViewPreviewed: Entry;
+  entryViewPreviewed: EntryView;
   pivotSelected: string|null = null;
 
   constructor(private dataService: DataService) {
@@ -58,9 +58,23 @@ export class DiagramComponent {
     });
 
     this.dataService.getEntryPreviewed().subscribe((entry) => {
-      this.entryViewPreviewed = this.entryViews.find((entryView: EntryView) => {
-        return entryView.entry === entry
-      });
+      if(entry) {
+        this.entryViewPreviewed = this.entryViews.find((entryView: EntryView) => {
+          return entryView.entry === entry
+        });
+
+        console.log(this.entryViewPreviewed);
+
+        this.addClassToAllEntries('entry_fade-partial');
+        this.entryViewPreviewed.addClass('entry_preview');
+      } else {
+        this.deleteClassFromAllEntries('entry_fade-partial');
+
+        if (this.entryViewPreviewed) {
+          this.entryViewPreviewed.deleteClass('entry_preview');
+          this.entryViewPreviewed = null;
+        }
+      }
     });
 
     // this.entryViewPreviewed = this.entryViews[20];
@@ -74,16 +88,12 @@ export class DiagramComponent {
   previewOn(entryView: EntryView) {
     if(!this.pivotSelected || entryView.entry.pivots.includes(this.pivotSelected)) {
       this.dataService.previewEntry(entryView.entry);
-      this.addClassToAllEntries('entry_fade-partial');
-      entryView.addClass('entry_preview');
     }
   }
 
   previewOff(entryView: EntryView) {
     if(!this.pivotSelected || entryView.entry.pivots.includes(this.pivotSelected)) {
       this.dataService.previewEntry(null);
-      this.deleteClassFromAllEntries('entry_fade-partial');
-      entryView.deleteClass('entry_preview');
     }
   }
 
@@ -218,10 +228,16 @@ export class DiagramComponent {
 
     for (let iEntryStage = 0; iEntryStage < entry.stages.length; iEntryStage++) {
       const entryStage = entry.stages[iEntryStage];
-      const startAngle = this.findStageAngle(entryStage.startStage);
+      let startAngle = this.findStageAngle(entryStage.startStage);
       const endStage = entryStage.endStage;
       const endStageConfig = this.diagramConfig.stages.find((header) => header.header == endStage.name);
-      const endAngle = this.findStageAngle(endStage) + endStageConfig.angularWidth;
+      let endAngle = this.findStageAngle(endStage) + endStageConfig.angularWidth;
+
+      // Handle special case where entry applies to all stages
+      if (startAngle === endAngle) {
+        startAngle = 0;
+        endAngle = 0.999;
+      }
 
       // Check whether we're crossing the first stage... (angle = 0)
       const crossingToggle = endAngle < startAngle ? 1 : 0;
