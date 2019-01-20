@@ -6,7 +6,7 @@ export const diagramConfig = {
   // pivot: 'Outside UK',
 
 
-  reverseSubsystemSortDirection: true,
+  reverseSubsystemSortDirection: false,
   subsystems: [
     { header: 'Project' }, // in the centre if `reverseSubsystemSortDirection` is false
     { header: 'Service  / Profession' },
