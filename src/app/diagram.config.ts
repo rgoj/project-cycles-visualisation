@@ -38,4 +38,11 @@ export const diagramConfig = {
     { header: 'Maintain', angularWidth: 1 / 12 },
     { header: 'Decline', angularWidth: 1 / 12 },
   ],
+
+  pivots: [
+    { header: 'Current', title: 'Current system' },
+    { header: 'Disruption', title: 'Disruption in the system' },
+    { header: 'Potential Disruption', title: 'Potential disruption' },
+    { header: 'Outside UK', title: 'Systems outside of the UK' },
+  ]
 };

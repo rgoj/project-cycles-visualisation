@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { diagramConfig } from 'src/app/diagram.config';
 import { Entry } from 'src/app/interfaces/item';
 import { DataService } from '../../services/data.service';
 
@@ -9,9 +10,12 @@ import { DataService } from '../../services/data.service';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
+  diagramConfig = diagramConfig;
+
   data: any;
 
   pivots: any;
+  pivotsDict: any;
   pivotSelected: string;
 
   entryPreviewed: Entry;
@@ -21,9 +25,10 @@ export class ListComponent implements OnInit {
     this.dataService.getData().subscribe((data) => {
       this.data = data;
 
-      console.log('This has been received by the list component:')
-      console.log(this.data);
-      console.log(this.pivots);
+      this.pivotsDict = this.convertMapToObject(this.data.pivotsMap);
+
+      // console.log('This has been received by the list component:')
+      // console.log(this.data);
     });
 
     this.dataService.getPivotSelected().subscribe((pivotName) => this.pivotSelected = pivotName);
@@ -47,5 +52,13 @@ export class ListComponent implements OnInit {
 
   closePivot(pivotName) {
     if(this.pivotSelected === pivotName) this.setPivot(null);
+  }
+
+  convertMapToObject(map) {
+    let object = Object.create(null);
+    for (let property of Array.from(map.entries())) {
+      object[property[0]] = property[1];
+    }
+    return object;
   }
 }

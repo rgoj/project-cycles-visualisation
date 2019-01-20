@@ -9,17 +9,17 @@
   </div> -->
 
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let pivot of data.pivots"
-                         (opened)="setPivot(pivot.name)"
-                         (closed)="closePivot(pivot.name)">
+    <mat-expansion-panel *ngFor="let pivot of diagramConfig.pivots"
+                         (opened)="setPivot(pivot.header)"
+                         (closed)="closePivot(pivot.header)">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{pivot.name}}
+          <h2>{{pivot.title}}</h2>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <ul class="pivot-entries">
-        <li *ngFor="let entry of pivot.entries">{{ entry.text }}</li>
+        <li *ngFor="let entry of pivotsDict[pivot.header]">{{ entry.text }}</li>
       </ul>
     </mat-expansion-panel>
   </mat-accordion>
