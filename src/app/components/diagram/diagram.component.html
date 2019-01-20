@@ -30,6 +30,7 @@
 
   <text *ngFor="let label of stageLabels; index as i"
         class="stage__text"
+        [class.legend_fade]="!checkStageInEntry(entryViewPreviewed, label.stage.name)"
         [attr.transform]="'translate(' +
                               label.edgeX + ', ' +
                               (label.edgeY) +

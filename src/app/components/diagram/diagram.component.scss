@@ -1,11 +1,19 @@
+$opacity-fade-partial: 0.25;
+$opacity-fade: 0.09;
+$animation-duration-medium: 400ms;
+$animation-duration-short: 225ms;
+$animation-duration-ultra-short: 50ms;
+
 .stage__line {
   stroke: lightgray; 
   stroke-width: 1;
+  transition: opacity $animation-duration-medium ease-out;
 }
 
 .stage__text {
   font-size: 0.8rem;
   text-anchor: middle;
+  transition: opacity $animation-duration-medium ease-out;
 }
 
 .aspect__text {
@@ -65,12 +73,6 @@
   stroke: #4fb5f7;
 }
 
-
-$opacity-fade-partial: 0.25;
-$opacity-fade: 0.09;
-$animation-duration-medium: 400ms;
-$animation-duration-short: 225ms;
-$animation-duration-ultra-short: 50ms;
 
 .entry {
   transition: opacity $animation-duration-short ease-in;

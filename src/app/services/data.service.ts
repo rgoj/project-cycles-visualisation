@@ -141,6 +141,7 @@ export class DataService {
       const continueProcessing = this.checkEntry(i, entry);
 
       entry.stages = this.processEntryStages(entryRow);
+      entry.stageNames = this.processEntryStageNames(entryRow);
 
       entry.pivots = this.processEntryPivots(entryRow)
 
@@ -265,7 +266,24 @@ export class DataService {
 
     return entryStages;
   }
+  
+  private processEntryStageNames(entryRow: []): string[] {
+    const entryStageNames: string[] = [];
 
+    for (let i = 0; i < this.sheetConfig.numberOfStages; i++) {
+      const columnIndex = this.sheetConfig.indexFirstStage + i;
+      const stageName = this.sheetConfig.headings[columnIndex];
+      const state = entryRow[columnIndex];
+
+      if (state === 'YES') {
+        entryStageNames.push(stageName);
+      }
+    }
+
+    return entryStageNames;
+  }
+
+ 
   private processEntryPivots(entryRow): string[] {
     const pivots: string[] = [];
 

@@ -56,6 +56,7 @@ export class Entry {
   primarySubsystem: EntrySubsystem;
 
   stages: EntryStage[];
+  stageNames: string[];
 
   pivots: string[];
 

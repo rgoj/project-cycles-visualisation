@@ -144,7 +144,7 @@ export class DiagramComponent {
       console.error(`Failed to assign an angle for stage "${stage.name}"`);
     }
 
-    const margin = 5;
+    const margin = 10;
     const stageLabel = {
       stage: stage,
       angle: angle,
@@ -344,14 +344,19 @@ export class DiagramComponent {
     return this.stageLines.find(line => line.stage == stage).angle;
   }
 
+  checkStageInEntry(entryView: EntryView, stageName: string) {
+    if (entryView) {
+      return entryView && entryView.entry.stageNames.includes(stageName);
+    } else{
+      return true;
+    }
+  }
+
   checkSubsystemInEntry(entryView: EntryView, subsystem: Subsystem) {
-    console.log('checkSubsystemInEntry');
-    console.log(entryView, subsystem);
     if(entryView) {
       const result = entryView.entry.subsystems.find((entrySubsystem) => {
         return entrySubsystem.subsystem.name === subsystem.name;
       });
-      console.log('result', result);
       return result;
     } else {
       return true;
