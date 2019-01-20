@@ -66,6 +66,8 @@
 }
 
 
+$opacity-fade-partial: 0.25;
+$opacity-fade: 0.09;
 $animation-duration-medium: 400ms;
 $animation-duration-short: 225ms;
 $animation-duration-ultra-short: 50ms;
@@ -87,12 +89,12 @@ $animation-duration-ultra-short: 50ms;
   }
 
   &.entry_fade-partial {
-    opacity: 0.25;
+    opacity: $opacity-fade-partial;
     transition: opacity $animation-duration-short ease-out;
   }
 
   &.entry_fade {
-    opacity: 0.09;
+    opacity: $opacity-fade;
     transition: opacity $animation-duration-short ease-out;
   }
 
@@ -136,4 +138,66 @@ $animation-duration-ultra-short: 50ms;
   100% {
     stroke-width: 10;
   }
+}
+
+.legend {
+  opacity: 1;
+  transition: opacity $animation-duration-medium ease-in;
+}
+
+.legend__text {
+  font-size: 0.8rem;
+}
+
+.legend_fade {
+  opacity: 0.1;
+  transition: opacity $animation-duration-medium ease-out;
+}
+
+.subsystem_fill_individual-home {
+  fill: #ffc700;
+}
+
+.subsystem_fill_health-wellbeing {
+  fill: #00d5da;
+}
+
+.subsystem_fill_social {
+  fill: #ffacca;
+}
+
+.subsystem_fill_cultural {
+  fill: #ffa900;
+}
+
+.subsystem_fill_education {
+  fill: #00d596;
+}
+
+.subsystem_fill_ecological {
+  fill: #bb62c8;
+}
+
+.subsystem_fill_technology {
+  fill: #0094da;
+}
+
+.subsystem_fill_economic {
+  fill: #f02300;
+}
+
+.subsystem_fill_political {
+  fill: #d6e048;
+}
+
+.subsystem_fill_policy-regulation {
+  fill: #f25b8d;
+}
+
+.subsystem_fill_service-profession {
+  fill: #aad278;
+}
+
+.subsystem_fill_project {
+  fill: #4fb5f7;
 }

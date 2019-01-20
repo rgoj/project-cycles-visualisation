@@ -124,6 +124,18 @@
           [attr.y2]="entryViewPreviewed.firstStageLine.endY" /> -->
   </g>
 
+  <g *ngFor="let subsystem of subsystems; let i = index"
+     class="legend"
+     [class.legend_fade]="!checkSubsystemInEntry(entryViewPreviewed, subsystem)">
+    <rect [attr.class]="'subsystem_fill_' + subsystem.className" 
+          [attr.x]="10"
+          [attr.y]="scale - 211 + i * 16"
+          [attr.width]="33"
+          [attr.height]="14"></rect>
+    <text class="legend__text" 
+          [attr.x]="50"
+          [attr.y]="scale - 200 + i * 16">{{subsystem.name}}</text>
+  </g>
 
 </svg>
 

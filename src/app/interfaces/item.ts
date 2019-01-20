@@ -11,10 +11,12 @@ export class Stage {
 export class Subsystem {
   index: number;
   name: string;
+  className: string;
 
   constructor() {
     this.index = null;
     this.name = null;
+    this.className = null;
   }
 }
 

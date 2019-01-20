@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 
 import { diagramConfig } from '../../diagram.config';
 import { DataService } from '../../services/data.service';
-import { Entry, SubsystemView, SubsystemCircle, EntryView } from '../../interfaces/item';
+import { Entry, SubsystemView, SubsystemCircle, EntryView, Subsystem } from '../../interfaces/item';
 
 
 @Component({
@@ -141,6 +141,11 @@ export class DiagramComponent {
     const entryViews: EntryView[] = [];
 
     const radiusIncrement = (this.radius - this.smallestRadius) / (entries.length - 1)
+
+    for(let iSubsystem = 0; iSubsystem < this.subsystems.length; iSubsystem++) {
+      const subsystem = this.subsystems[iSubsystem];
+      subsystem.className = this.createClassNameFromString(subsystem.name);
+    }
 
     let currentSubsystem = null;
     for(let iEntry = 0; iEntry < entries.length; iEntry++) {
@@ -306,6 +311,20 @@ export class DiagramComponent {
    */
   findStageAngle(stage) {
     return this.stageLines.find(line => line.stage == stage).angle;
+  }
+
+  checkSubsystemInEntry(entryView: EntryView, subsystem: Subsystem) {
+    console.log('checkSubsystemInEntry');
+    console.log(entryView, subsystem);
+    if(entryView) {
+      const result = entryView.entry.subsystems.find((entrySubsystem) => {
+        return entrySubsystem.subsystem.name === subsystem.name;
+      });
+      console.log('result', result);
+      return result;
+    } else {
+      return true;
+    }
   }
 
   /*
