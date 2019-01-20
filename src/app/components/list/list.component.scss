@@ -1,4 +1,10 @@
 .pivot-entries {
+    padding-left: 0;
     max-height: 50vh;
     overflow-y: scroll;
+    list-style-type: none;
+}
+
+.pivot-entries li {
+    padding: 10px;
 }

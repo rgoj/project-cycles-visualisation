@@ -47,3 +47,19 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: 30px;
     margin-right: 30px;
 }
+
+$mat-card-padding: 16px;
+
+.mat-card {
+    padding: 0 $mat-card-padding 0 $mat-card-padding !important;
+    line-height: 2;
+    line-height: 20px;
+    transition: all 280ms cubic-bezier(.4,0,.2,1) !important;
+}
+
+.mat-card.mat-elevation-z8 {
+    font-size: 150%;
+    line-height: 27px;
+    padding: $mat-card-padding !important;
+    transition: all 280ms cubic-bezier(.4,0,.2,1) !important;
+}

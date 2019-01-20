@@ -35,10 +35,6 @@ export class ListComponent implements OnInit {
 
     this.dataService.entryPreviewed.subscribe((entryPreviewed) => {
       this.entryPreviewed = entryPreviewed;
-      if (this.entryPreviewed) {
-        // console.log(this.entryPreviewed.primarySubsystem.subsystem.name);
-        // console.log(this.entryPreviewed.text);
-      }
     });
   }
 
