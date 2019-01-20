@@ -27,6 +27,7 @@ export class DiagramComponent {
   sheetConfig;
 
   stageLines;
+  stageLabels;
   subsystems;
   subsystemViews: SubsystemView[] = [];
   subsystemCircles;
@@ -49,6 +50,7 @@ export class DiagramComponent {
         this.pivots = data.pivots;
         this.pivotsMap = data.pivotsMap;
         this.stageLines = data.stages.map(stage => this.calculateStageLine(stage));
+        this.stageLabels = data.stages.map(stage => this.calculateStageLabels(stage));
         this.subsystems = data.subsystems;
         this.subsystemCircles = data.subsystems.map(
           subsystem => this.calculateSubsystemCircle(subsystem)
@@ -122,6 +124,35 @@ export class DiagramComponent {
     }
 
     return stageLine;
+  }
+
+  calculateStageLabels(stage) {
+    // Sum up angular widths of all stages before this one to find the final angle
+    let angle = 0;
+    let headerFound = false;
+    for (let diagramStage of this.diagramConfig.stages) {
+      if (diagramStage.header == stage.name) {
+        headerFound = true;
+        angle += diagramStage.angularWidth / 2;
+        break; // We've got the final angle!
+      } else {
+        angle += diagramStage.angularWidth;
+      }
+    }
+
+    if (!headerFound) {
+      console.error(`Failed to assign an angle for stage "${stage.name}"`);
+    }
+
+    const margin = 5;
+    const stageLabel = {
+      stage: stage,
+      angle: angle,
+      edgeX: this.radialX(angle, this.radius + margin),
+      edgeY: this.radialY(angle, this.radius + margin)
+    }
+
+    return stageLabel;
   }
 
   calculateSubsystemCircle(subsystem) {

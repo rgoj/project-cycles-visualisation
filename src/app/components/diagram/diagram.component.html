@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg"
-  [attr.viewBox]="'0 0 ' + scale + ' ' + scale"
+  [attr.viewBox]="'0 0 ' + (scale + 20) + ' ' + scale"
   preserveAspectRatio="xMinYMin meet">
 
   <!-- <g *ngFor="let circle of subsystemCircles; index as i">
@@ -21,24 +21,24 @@
     </text>
   </g> -->
 
-  <g *ngFor="let line of stageLines; index as i">
-    <line class="stage__line"
-          [attr.x1]="centreX"
-          [attr.y1]="centreY"
-          [attr.x2]="line.edgeX"
-          [attr.y2]="line.edgeY" />
+  <line *ngFor="let line of stageLines; index as i"
+        class="stage__line"
+        [attr.x1]="centreX"
+        [attr.y1]="centreY"
+        [attr.x2]="line.edgeX"
+        [attr.y2]="line.edgeY" />
 
-    <text class="stage__text"
-          [attr.transform]="'translate(' +
-                               line.edgeX + ', ' +
-                               (line.edgeY) +
-                             ')
-                             rotate(' + (270 + 360 * line.angle) + ')
-                             translate(5, -5)
-                            '">
-      {{line.stage.name}}
-    </text>
-  </g>
+  <text *ngFor="let label of stageLabels; index as i"
+        class="stage__text"
+        [attr.transform]="'translate(' +
+                              label.edgeX + ', ' +
+                              (label.edgeY) +
+                            ')
+                            rotate(' + (180 + 360 * label.angle) + ')
+                            translate(5, -5)
+                          '">
+    {{label.stage.name}}
+  </text>
 
   <g *ngFor="let entry of entryViews; index as i" 
      [attr.class]="'entry ' + entry.class"
