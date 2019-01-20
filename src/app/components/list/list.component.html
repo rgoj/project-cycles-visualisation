@@ -10,6 +10,7 @@
 
   <mat-accordion>
     <mat-expansion-panel *ngFor="let pivot of diagramConfig.pivots"
+                         [expanded]="pivot.header === pivotSelected"
                          (opened)="setPivot(pivot.header)"
                          (closed)="closePivot(pivot.header)">
       <mat-expansion-panel-header>

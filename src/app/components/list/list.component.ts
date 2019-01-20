@@ -35,6 +35,9 @@ export class ListComponent implements OnInit {
 
     this.dataService.entryPreviewed.subscribe((entryPreviewed) => {
       this.entryPreviewed = entryPreviewed;
+      if (this.entryPreviewed && !this.pivotSelected) {
+        this.dataService.selectPivot(this.entryPreviewed.pivots[0]);
+      }
     });
   }
 
@@ -42,8 +45,8 @@ export class ListComponent implements OnInit {
   }
 
   setPivot(pivotName) {
-    this.pivotSelected = pivotName;
     this.dataService.selectPivot(pivotName);
+    console.log('setPivot fired!');
   }
 
   closePivot(pivotName) {
