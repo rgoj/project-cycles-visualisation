@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Directive, Component, OnInit, ViewChildren, ElementRef, Input } from '@angular/core';
 
 import { diagramConfig } from 'src/app/diagram.config';
 import { Entry } from 'src/app/interfaces/item';
 import { DataService } from '../../services/data.service';
+
 
 @Component({
   selector: 'app-list',
@@ -59,6 +60,12 @@ export class ListComponent implements OnInit {
 
   previewOff(entry: Entry) {
     this.dataService.previewEntry(null);
+  }
+
+  scrollIntoView() {
+    // Ouch. What a hack :(
+    const nativeElement = window.document.getElementById('entryPreviewed');
+    nativeElement.scrollIntoViewIfNeeded({ behavior: "smooth", block: "start" });
   }
 
   convertMapToObject(map) {

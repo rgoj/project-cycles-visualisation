@@ -21,11 +21,13 @@
 
       <ul class="pivot-entries">
         <li *ngFor="let entry of pivotsDict[pivot.header]">
-          <mat-card [class.mat-elevation-z0]="entry !== entryPreviewed"
+          <mat-card [attr.id]="entry === entryPreviewed ? 'entryPreviewed' : ''"
+                    [class.mat-elevation-z0]="entry !== entryPreviewed"
                     [class.mat-elevation-z8]="entry === entryPreviewed"
                     (mouseenter)="previewOn(entry)"
                     (mouseleave)="previewOff(entry)">
             {{ entry.text }}
+            {{ entry === entryPreviewed ? scrollIntoView() : '' }}
           </mat-card>
         </li>
       </ul>
