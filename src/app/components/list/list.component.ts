@@ -65,7 +65,7 @@ export class ListComponent implements OnInit {
   scrollIntoView() {
     // Ouch. What a hack :(
     const nativeElement = window.document.getElementById('entryPreviewed');
-    nativeElement.scrollIntoViewIfNeeded({ behavior: "smooth", block: "start" });
+    (nativeElement as any).scrollIntoViewIfNeeded({ behavior: "smooth", block: "start" });
   }
 
   convertMapToObject(map) {
