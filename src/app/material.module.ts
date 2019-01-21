@@ -4,6 +4,7 @@ import {
   MatCardModule,
   MatExpansionModule,
   MatIconModule,
+  MatSlideToggleModule,
 } from '@angular/material';
 
 @NgModule({
@@ -12,6 +13,7 @@ import {
     MatCardModule,
     MatExpansionModule,
     MatIconModule,
+    MatSlideToggleModule,
   ]
 })
 export class MaterialModule { }
@@ -50,7 +52,6 @@ export class MaterialModule { }
 //   MatSelectModule,
 //   MatSidenavModule,
 //   MatSliderModule,
-//   MatSlideToggleModule,
 //   MatSnackBarModule,
 //   MatSortModule,
 //   MatStepperModule,

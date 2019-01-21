@@ -8,6 +8,16 @@
     </p>
   </div> -->
 
+  <mat-slide-toggle [color]="'primary'"
+                    [checked]="animate"
+                    (change)="toggleAutoAnimate()">
+    Auto play
+  </mat-slide-toggle>
+
+  <br>
+  <br>
+  
+
   <mat-accordion>
     <mat-expansion-panel *ngFor="let pivot of diagramConfig.pivots"
                          [expanded]="pivot.header === pivotSelected"
@@ -33,6 +43,8 @@
       </ul>
     </mat-expansion-panel>
   </mat-accordion>
+
+
 
   <!-- <ul>
     <li *ngFor="let entry of data.entries">{{ entry.text }}</li>
